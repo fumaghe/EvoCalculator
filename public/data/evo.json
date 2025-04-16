@@ -1498,7 +1498,7 @@
       "Balance": "+30(^90)",
       "Passing": "+30(^93)",
       "Ball Control": "+30(^92)",
-      "Dribbling (attr.)": "+30(^91)",
+      "Dribbling": "+30(^91)",
       "Reactions": "+30(^92)",
       "Composure": "+30(^93)",
       "Shooting": "+45(^89)"
@@ -1545,7 +1545,7 @@
           "Pace +4 (^88)",
           "Passing +30 (^93)",
           "Ball Control +30 (^92)",
-          "Dribbling (attr.) +30 (^91)"
+          "Dribbling +30 (^91)"
         ],
         "effects": {}
       },

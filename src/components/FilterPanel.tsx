@@ -1,53 +1,110 @@
 // src/components/FilterPanel.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Filter, X } from 'lucide-react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 
+export interface Filters {
+  statRanges: {
+    ovr: [number, number];
+    pac: [number, number];
+    sho: [number, number];
+    pas: [number, number];
+    dri: [number, number];
+    def: [number, number];
+    phy: [number, number];
+  };
+  skillMoves: [number, number];
+  weakFoot: [number, number];
+  playstyles: string[];
+  playstylesPlus: string[];
+  roles: string[];
+}
+
 interface FilterPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  filters: Filters;
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  onApply: () => void;
 }
 
-interface StatRanges {
-  ovr: [number, number];
-  phy: [number, number];
-  def: [number, number];
-}
+// Base playstyles (without '+')
+const allPlaystyles = [
+  '1v1 Close Down',
+  'Acrobatic',
+  'Aerial',
+  'Anticipate',
+  'Block',
+  'Bruiser',
+  'Chip Shot',
+  'Cross Claimer',
+  'Dead Ball',
+  'Deflector',
+  'Far Reach',
+  'Far Throw',
+  'Finesse Shot',
+  'First Touch',
+  'Flair',
+  'Footwork',
+  'Incisive Pass',
+  'Intercept',
+  'Jockey',
+  'Long Ball Pass',
+  'Long Throw',
+  'Pinged Pass',
+  'Power Header',
+  'Power Shot',
+  'Press Proven',
+  'Quick Step',
+  'Rapid',
+  'Relentless',
+  'Slide Tackle',
+  'Technical',
+  'Tiki Taka',
+  'Trickster',
+  'Trivela',
+  'Whipped Pass',
+];
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose }) => {
-  const [evolutionType, setEvolutionType] = useState<'free' | 'premium'>('free');
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
-  const [statRanges, setStatRanges] = useState<StatRanges>({
-    ovr: [0, 100],
-    phy: [0, 100],
-    def: [0, 100],
-  });
-  const [playstyles, setPlaystyles] = useState<string[]>([]);
+// Available roles including added CAM, LB, RB
+const allRoles = ['CDM', 'CM', 'CB', 'ST', 'LM', 'RM', 'LW', 'RM', 'CAM', 'LB', 'RB'];
 
-  const roles = ['CDM', 'CM', 'CB', 'ST', 'LW', 'RW'];
-  const availablePlaystyles = ['Power Header', 'Long Ball Pass', 'Aerial', 'Technical'];
-
-  const handleRoleToggle = (role: string) => {
-    setSelectedRoles(prev =>
-      prev.includes(role)
-        ? prev.filter(r => r !== role)
-        : [...prev, role]
-    );
+const FilterPanel: React.FC<FilterPanelProps> = ({
+  isOpen,
+  onClose,
+  filters,
+  setFilters,
+  onApply,
+}) => {
+  const updateRange = (
+    key: keyof Filters['statRanges'],
+    range: [number, number]
+  ) => {
+    setFilters(f => ({
+      ...f,
+      statRanges: { ...f.statRanges, [key]: range },
+    }));
   };
 
-  const handlePlaystyleToggle = (style: string) => {
-    setPlaystyles(prev =>
-      prev.includes(style)
-        ? prev.filter(s => s !== style)
-        : [...prev, style]
-    );
+  const toggle = (
+    field: 'roles' | 'playstyles' | 'playstylesPlus',
+    value: string
+  ) => {
+    setFilters(f => {
+      const arr = f[field];
+      return {
+        ...f,
+        [field]: arr.includes(value)
+          ? arr.filter(x => x !== value)
+          : [...arr, value],
+      };
+    });
   };
 
   return (
     <div
-      className={`fixed right-0 top-0 h-screen w-96 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out ${
+      className={`fixed right-0 top-0 h-screen w-96 bg-white dark:bg-gray-800 shadow-lg transform transition-transform ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       } z-50`}
     >
@@ -55,31 +112,90 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose }) => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <Filter className="w-5 h-5 mr-2 text-primary-600" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Filters</h2>
+            <h2 className="text-xl">Filtri</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+          <button onClick={onClose}>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Evolution Type */}
+        {/* Stat Ranges */}
+        {Object.entries(filters.statRanges).map(([stat, range]) => (
+          <div key={stat} className="mb-6">
+            <h3 className="mb-2 capitalize">{stat} Range</h3>
+            <RangeSlider
+              min={0}
+              max={99}
+              step={1}
+              value={range as [number, number]}
+              onInput={(v: [number, number]) =>
+                updateRange(stat as keyof Filters['statRanges'], v)
+              }
+            />
+            <div className="flex justify-between text-sm">
+              <span>{range[0]}</span>
+              <span>{range[1]}</span>
+            </div>
+          </div>
+        ))}
+
+        {/* Skill Moves / Weak Foot */}
+        {(['skillMoves', 'weakFoot'] as const).map(field => (
+          <div key={field} className="mb-6">
+            <h3 className="mb-2 capitalize">
+              {field === 'skillMoves' ? 'Skill Moves' : 'Weak Foot'} Range
+            </h3>
+            <RangeSlider
+              min={0}
+              max={5}
+              step={1}
+              value={filters[field]}
+              onInput={(v: [number, number]) =>
+                setFilters(f => ({ ...f, [field]: v }))
+              }
+            />
+            <div className="flex justify-between text-sm">
+              <span>{filters[field][0]}</span>
+              <span>{filters[field][1]}</span>
+            </div>
+          </div>
+        ))}
+
+        {/* Playstyles plain */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Evolution Type</h3>
-          <div className="flex space-x-2">
-            {['free', 'premium'].map(type => (
+          <h3 className="mb-2">Playstyles</h3>
+          <div className="flex flex-wrap gap-2">
+            {allPlaystyles.map(ps => (
               <button
-                key={type}
-                onClick={() => setEvolutionType(type as 'free' | 'premium')}
-                className={`px-4 py-2 rounded-lg capitalize ${
-                  evolutionType === type
-                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-100'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                key={ps}
+                onClick={() => toggle('playstyles', ps)}
+                className={`px-3 py-1 rounded ${
+                  filters.playstyles.includes(ps)
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700'
                 }`}
               >
-                {type}
+                {ps}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Playstyles Plus */}
+        <div className="mb-6">
+          <h3 className="mb-2">Playstyles+</h3>
+          <div className="flex flex-wrap gap-2">
+            {allPlaystyles.map(ps => (
+              <button
+                key={ps}
+                onClick={() => toggle('playstylesPlus', ps)}
+                className={`px-3 py-1 rounded ${
+                  filters.playstylesPlus.includes(ps)
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                {ps}+
               </button>
             ))}
           </div>
@@ -87,70 +203,29 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose }) => {
 
         {/* Roles */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Roles</h3>
-          <div className="grid grid-cols-3 gap-2">
-            {roles.map(role => (
+          <h3 className="mb-2">Roles</h3>
+          <div className="flex flex-wrap gap-2">
+            {allRoles.map(r => (
               <button
-                key={role}
-                onClick={() => handleRoleToggle(role)}
-                className={`px-3 py-2 rounded-lg text-sm ${
-                  selectedRoles.includes(role)
-                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-100'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                key={r}
+                onClick={() => toggle('roles', r)}
+                className={`px-3 py-1 rounded ${
+                  filters.roles.includes(r)
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700'
                 }`}
               >
-                {role}
+                {r}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Stat Ranges */}
-        {Object.entries(statRanges).map(([stat, range]) => (
-          <div key={stat} className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 capitalize">
-              {stat} Range
-            </h3>
-            <RangeSlider
-              min={0}
-              max={100}
-              step={1}
-              value={range}
-              onInput={(value: [number, number]) =>
-                setStatRanges(prev => ({ ...prev, [stat]: value }))
-              }
-              className="mb-2"
-            />
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-              <span>{range[0]}</span>
-              <span>{range[1]}</span>
-            </div>
-          </div>
-        ))}
-
-        {/* Playstyles */}
-        <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Playstyles</h3>
-          <div className="space-y-2">
-            {availablePlaystyles.map(style => (
-              <button
-                key={style}
-                onClick={() => handlePlaystyleToggle(style)}
-                className={`w-full px-4 py-2 rounded-lg text-left ${
-                  playstyles.includes(style)
-                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-100'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                {style}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Apply Filters Button */}
-        <button className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors duration-200">
-          Apply Filters
+        <button
+          onClick={onApply}
+          className="w-full py-3 bg-primary-600 text-white rounded-lg"
+        >
+          Applica Filtri
         </button>
       </div>
     </div>

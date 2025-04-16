@@ -1,14 +1,37 @@
 // src/components/Dashboard.tsx
 import React, { useState } from 'react';
 import { ChevronRight, Filter as FilterIcon, Download, Share2 } from 'lucide-react';
-import FilterPanel from './FilterPanel';
-import SimulationPanel from './SimulationPanel';
 import EvoSelector, { Evolution } from './EvoSelector';
+import SimulationPanel from './SimulationPanel';
+import FilterPanel, { Filters } from './FilterPanel';
 
 const Dashboard: React.FC = () => {
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
   const [selectedEvos, setSelectedEvos] = useState<Evolution[]>([]);
   const [targetRole, setTargetRole] = useState("CDM");
+
+  // Stato e handler per i filtri
+  const [filters, setFilters] = useState<Filters>({
+    statRanges: {
+      ovr: [0, 99],
+      pac: [0, 99],
+      sho: [0, 99],
+      pas: [0, 99],
+      dri: [0, 99],
+      def: [0, 99],
+      phy: [0, 99],
+    },
+    skillMoves:    [0, 5],
+    weakFoot:      [0, 5],
+    playstyles:    [],
+    playstylesPlus:[],
+    roles:         []
+  });
+
+  const handleApplyFilters = () => {
+    // qui potresti sollevare un evento o aggiornare SimulationPanel via context/props
+    setFilterPanelOpen(false);
+  };
 
   return (
     <div className="pt-16">
@@ -58,25 +81,31 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Sezione di selezione delle evoluzioni */}
-      <EvoSelector onSelectionChange={(evos: Evolution[]) => setSelectedEvos(evos)} />
+      {/* Selector */}
+      <EvoSelector onSelectionChange={setSelectedEvos} />
 
-      {/* Input per target role */}
+      {/* Ruolo target */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Ruolo Target</label>
         <input
           type="text"
           value={targetRole}
-          onChange={(e) => setTargetRole(e.target.value)}
+          onChange={e => setTargetRole(e.target.value)}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
         />
       </div>
 
-      {/* Pannello di Simulazione - visualizza i risultati */}
+      {/* Simulation Panel */}
       <SimulationPanel selectedEvos={selectedEvos} targetRole={targetRole} />
 
-      {/* Il Filter Panel */}
-      <FilterPanel isOpen={filterPanelOpen} onClose={() => setFilterPanelOpen(false)} />
+      {/* Filter Panel */}
+      <FilterPanel
+        isOpen={filterPanelOpen}
+        onClose={() => setFilterPanelOpen(false)}
+        filters={filters}
+        setFilters={setFilters}
+        onApply={handleApplyFilters}
+      />
     </div>
   );
 };
