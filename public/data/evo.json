@@ -1,0 +1,1900 @@
+[
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Anticipate(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Anticipate (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "931-immortal-anticipate",
+    "name": "Immortal Anticipate+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/931-immortal-anticipate/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "6"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle": "Tiki Taka(^6)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle Incisive Pass (^6)",
+          "PlayStyle Tiki Taka (^6)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "918-immortal-incisive-tiki-taka",
+    "name": "Immortal Incisive & Tiki-Taka EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/918-immortal-incisive-tiki-taka/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "150,000",
+    "requirements": {
+      "Player": "Gervinho",
+      "Rarity": "Streets Won't Forget",
+      "Position": "LW",
+      "Max PS": "10",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Streets Won't Forget",
+      "SM": "+1 ★",
+      "Role++": "LM Inside Forward++",
+      "PlayStyle+": "Rapid(^2)",
+      "PlayStyle": "Relentless(^10)",
+      "Overall": "+9",
+      "Pace": "+1",
+      "Defending": "+1",
+      "Physicality": "+8",
+      "Dribbling": "+9",
+      "Shooting": "+16",
+      "Passing": "+16"
+    },
+    "challenges": [
+      "Play 3 matches in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game.",
+      "Win 1 match in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Finesse Shot",
+          "Overall +9",
+          "Pace +1",
+          "Shooting +16",
+          "Passing +16"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "SM +1 ★",
+          "PlayStyle Relentless (^10)",
+          "Defending +1",
+          "Physicality +8",
+          "Dribbling +9"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity Streets Won't Forget",
+          "Role++ LM Inside Forward++",
+          "PlayStyle+ Rapid (^2)",
+          "PlayStyle Technical",
+          "PlayStyle First Touch"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "878-streets-wont-forget-gervinho",
+    "name": "Streets Won't Forget - Gervinho EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/878-streets-wont-forget-gervinho/"
+  },
+  {
+    "unlock_date": "2025-04-30",
+    "expires_on": "2025-05-07",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 89",
+      "Max PS": "9",
+      "Pace": "Max. 93",
+      "Dribbling": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions II",
+      "PlayStyle": "Bruiser(^9)",
+      "Overall": "+1(^90)",
+      "Shooting": "+8(^92)",
+      "Defending": "+8(^91)"
+    },
+    "challenges": [
+      "Play 3 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Evolutions II",
+          "PlayStyle Block (^9)",
+          "PlayStyle Bruiser (^9)",
+          "Overall +1 (^90)",
+          "Shooting +8 (^92)",
+          "Defending +8 (^91)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "944-gladiator-ii",
+    "name": "Gladiator II EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/944-gladiator-ii/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "6"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle": "Anticipate(^6)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle Jockey (^6)",
+          "PlayStyle Anticipate (^6)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "919-immortal-anticipate-jockey",
+    "name": "Immortal Anticipate & Jockey EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/919-immortal-anticipate-jockey/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Incisive Pass(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Incisive Pass (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "928-immortal-incisive-pass",
+    "name": "Immortal Incisive Pass+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/928-immortal-incisive-pass/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "6"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle": "Press Proven(^6)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle Technical (^6)",
+          "PlayStyle Press Proven (^6)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "921-immortal-technical-press-proven",
+    "name": "Immortal Technical & Press Proven EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/921-immortal-technical-press-proven/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "Role++": "CM Deep-Lying Playmaker++",
+      "Overall": "+1",
+      "Shooting": "+1",
+      "Passing": "+1",
+      "Defending": "+1",
+      "Physicality": "+1",
+      "Pace": "+2"
+    },
+    "challenges": [
+      "Play 2 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "Overall +1",
+          "Shooting +1",
+          "Passing +1",
+          "Pace +2"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "Role++ CM Deep-Lying Playmaker++",
+          "Defending +1",
+          "Physicality +1"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "934-90-to-91-become-immortal",
+    "name": "90 to 91 Become Immortal EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/934-90-to-91-become-immortal/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92"
+    },
+    "total_upgrades": {
+      "SM": "+3 ★(^4)",
+      "WF": "+4 ★(^5)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "SM +3 ★ (^4)",
+          "WF +4 ★ (^5)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "936-4-sm5-wf-become-immortal",
+    "name": "4* SM/5* WF Become Immortal EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/936-4-sm5-wf-become-immortal/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "500,000",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "9",
+      "Max PS+": "2"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Icon",
+      "SM": "+4 ★(^5)",
+      "WF": "+4 ★(^5)",
+      "PlayStyle+": "Press Proven(^3)",
+      "PlayStyle": "Relentless(^9)",
+      "Overall": "+2(^94)",
+      "Pace": "+1",
+      "Shooting": "+1",
+      "Defending": "+1",
+      "Physicality": "+1",
+      "Passing": "+1",
+      "Dribbling": "+1"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle+ Pinged Pass (^3)",
+          "PlayStyle Relentless (^9)",
+          "Overall +2 (^94)",
+          "Pace +1",
+          "Shooting +1"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "WF +4 ★ (^5)",
+          "PlayStyle+ Press Proven (^3)",
+          "PlayStyle Block (^9)",
+          "Defending +1",
+          "Physicality +1"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity Become Immortal Icon",
+          "SM +4 ★ (^5)",
+          "PlayStyle+ Tiki Taka (^3)",
+          "PlayStyle Trickster (^9)",
+          "Passing +1",
+          "Dribbling +1"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "939-immortality",
+    "name": "Immortality EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/939-immortality/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "6"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle": "Trivela(^6)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle Finesse Shot (^6)",
+          "PlayStyle Trivela (^6)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "917-immortal-finesse-trivela",
+    "name": "Immortal Finesse & Trivela EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/917-immortal-finesse-trivela/"
+  },
+  {
+    "unlock_date": "2025-05-10",
+    "expires_on": "2025-05-10",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "FUT Birthday EVO",
+      "WF": "+4 ★"
+    },
+    "challenges": [
+      "Play 1 match using your active EVO player in any game mode."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity FUT Birthday EVO",
+          "WF +4 ★"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "904-season-ladder-weak-foot-boost",
+    "name": "Season Ladder Weak Foot Boost EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/904-season-ladder-weak-foot-boost/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "150,000",
+    "requirements": {
+      "Player": "Víctor Ibarbo",
+      "Rarity": "Streets Won't Forget",
+      "Position": "RW",
+      "Max PS": "10",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Streets Won't Forget",
+      "WF": "+1 ★",
+      "Role++": "RM Inside Forward++",
+      "PlayStyle+": "Quick Step(^2)",
+      "PlayStyle": "Trivela",
+      "Overall": "+12",
+      "Defending": "+2",
+      "Pace": "+3",
+      "Physicality": "+6",
+      "Dribbling": "+10",
+      "Shooting": "+14",
+      "Passing": "+17"
+    },
+    "challenges": [
+      "Play 3 matches in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game.",
+      "Win 1 match in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Finesse Shot",
+          "Overall +12",
+          "Pace +3",
+          "Shooting +14",
+          "Passing +17"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "WF +1 ★",
+          "PlayStyle Relentless (^10)",
+          "Defending +2",
+          "Physicality +6",
+          "Dribbling +10"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity Streets Won't Forget",
+          "Role++ RM Inside Forward++",
+          "PlayStyle+ Quick Step (^2)",
+          "PlayStyle First Touch",
+          "PlayStyle Trivela"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "879-streets-wont-forget-ibarbo",
+    "name": "Streets Won't Forget - Ibarbo EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/879-streets-wont-forget-ibarbo/"
+  },
+  {
+    "unlock_date": "2025-04-20",
+    "expires_on": "2025-04-27",
+    "cost": "100,000",
+    "requirements": {
+      "Overall": "Max. 90",
+      "Max PS": "10",
+      "Max PS+": "2",
+      "Passing": "Max. 89",
+      "Dribbling": "Max. 92",
+      "Defending": "Max. 70",
+      "Physicality": "Max. 84"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "SM": "+1 ★(^4)",
+      "WF": "+2 ★",
+      "PlayStyle+": "Rapid(^2)",
+      "PlayStyle": "Trivela(^10)",
+      "Overall": "+3(^92)",
+      "Passing": "+2(^85)",
+      "Pace": "+5(^93)",
+      "Dribbling": "+5(^91)",
+      "Penalties": "+5(^85)",
+      "Shot Power": "+7(^89)",
+      "Long Shots": "+7(^89)",
+      "Stamina": "+10(^92)",
+      "Heading Accuracy": "+10(^90)",
+      "Positioning": "+10(^93)",
+      "Finishing": "+10(^94)",
+      "Volleys": "+10(^90)"
+    },
+    "challenges": [
+      "Play 2 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "SM +1 ★ (^4)",
+          "PlayStyle Finesse Shot (^10)",
+          "Overall +1 (^92)",
+          "Passing +2 (^85)",
+          "Pace +5 (^93)",
+          "Stamina +10 (^92)",
+          "Heading Accuracy +10 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Quick Step (^10)",
+          "PlayStyle Trivela (^10)",
+          "Overall +1 (^92)",
+          "Shot Power +7 (^89)",
+          "Long Shots +7 (^89)",
+          "Positioning +10 (^93)",
+          "Finishing +10 (^94)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle+ Finesse Shot (^2)",
+          "PlayStyle First Touch (^10)",
+          "Overall +1 (^92)",
+          "Dribbling +5 (^91)",
+          "Penalties +5 (^85)",
+          "Volleys +10 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 4,
+        "description": [
+          "Rarity Evolutions III",
+          "WF +2 ★",
+          "PlayStyle+ Rapid (^2)",
+          "PlayStyle Flair (^10)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "926-tu-eres-mi-idolo-i",
+    "name": "Tú Eres Mi Ídolo I EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/926-tu-eres-mi-idolo-i/"
+  },
+  {
+    "unlock_date": "2025-04-23",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 89",
+      "Max PS": "9",
+      "Pace": "Max. 93",
+      "Dribbling": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions II",
+      "PlayStyle": "Low Driven Shot(^9)",
+      "Overall": "+1(^90)",
+      "Shooting": "+8(^92)",
+      "Defending": "+8(^91)"
+    },
+    "challenges": [
+      "Play 3 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Evolutions II",
+          "PlayStyle Intercept (^9)",
+          "PlayStyle Low Driven Shot (^9)",
+          "Overall +1 (^90)",
+          "Shooting +8 (^92)",
+          "Defending +8 (^91)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "938-gladiator",
+    "name": "Gladiator EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/938-gladiator/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 89",
+      "Max PS": "9",
+      "Pace": "Max. 94",
+      "Dribbling": "Max. 98"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions II",
+      "PlayStyle": "Aerial(^9)",
+      "Overall": "+1(^90)",
+      "Pace": "+3(^89)",
+      "Shooting": "+6(^90)",
+      "Physicality": "+6(^87)"
+    },
+    "challenges": [
+      "Play 3 matches in Rivals or Champions using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Evolutions II",
+          "PlayStyle Trivela (^9)",
+          "PlayStyle Aerial (^9)",
+          "Overall +1 (^90)",
+          "Pace +3 (^89)",
+          "Shooting +6 (^90)",
+          "Physicality +6 (^87)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "940-hawk",
+    "name": "Hawk EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/940-hawk/"
+  },
+  {
+    "unlock_date": "2025-05-10",
+    "expires_on": "2025-05-10",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "FUT Birthday EVO",
+      "SM": "+4 ★"
+    },
+    "challenges": [
+      "Play 1 match using your active EVO player in any game mode."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity FUT Birthday EVO",
+          "SM +4 ★"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "903-season-ladder-skill-move-boost",
+    "name": "Season Ladder Skill Move Boost EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/903-season-ladder-skill-move-boost/"
+  },
+  {
+    "unlock_date": "2025-04-26",
+    "expires_on": "2025-05-03",
+    "cost": "",
+    "requirements": {
+      "Max Pos.": "2",
+      "Overall": "Max. 90",
+      "Position": "LW, LM",
+      "Max PS": "9",
+      "Pace": "Max. 93",
+      "Shooting": "Max. 88",
+      "Physicality": "Max. 87"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions II",
+      "New Pos.": "CM",
+      "Role++": "CM Deep-Lying Playmaker++",
+      "Role+": "CM Box-To-Box+",
+      "PlayStyle": "Intercept(^9)",
+      "Overall": "+10(^92)",
+      "Passing": "+3(^88)",
+      "Dribbling": "+3(^92)",
+      "Pace": "+8(^93)",
+      "Physicality": "+15(^87)",
+      "Defending": "+45(^89)"
+    },
+    "challenges": [
+      "Play 2 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. LB",
+          "New Pos. CM",
+          "PlayStyle Dead Ball (^9)",
+          "PlayStyle Jockey (^9)",
+          "Overall +5 (^92)",
+          "Passing +3 (^88)",
+          "Dribbling +3 (^92)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Role++ CM Deep-Lying Playmaker++",
+          "Role+ LB Falseback+",
+          "Role+ CM Box-To-Box+",
+          "PlayStyle Intercept (^9)",
+          "Overall +5 (^92)",
+          "Physicality +15 (^87)",
+          "Defending +20 (^89)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity Evolutions II",
+          "Role++ LB Fullback++",
+          "PlayStyle Pinged Pass (^9)",
+          "PlayStyle Long Ball Pass (^9)",
+          "Pace +8 (^93)",
+          "Defending +25 (^89)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "941-jack-of-all-trades-ii",
+    "name": "Jack Of All Trades II EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/941-jack-of-all-trades-ii/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Max Pos.": "3",
+      "Overall": "Max. 88"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "New Pos.": "CAM(^4)",
+      "SM": "+1 ★(^4)",
+      "WF": "+1 ★(^4)",
+      "Role++": "CAM Shadow Striker++",
+      "Overall": "+2(^90)",
+      "Physicality": "+5(^83)",
+      "Dribbling": "+8(^86)",
+      "Pace": "+15(^88)",
+      "Shooting": "+20(^87)",
+      "Passing": "+20(^90)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. CAM (^4)",
+          "Role++ CM Box-To-Box++",
+          "Role++ CAM Playmaker++",
+          "Overall +2 (^90)",
+          "Physicality +5 (^83)",
+          "Dribbling +8 (^86)",
+          "Pace +15 (^88)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "SM +1 ★ (^4)",
+          "WF +1 ★ (^4)",
+          "Role++ CAM Shadow Striker++",
+          "Shooting +20 (^87)",
+          "Passing +20 (^90)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "923-become-immortal-ii-cam",
+    "name": "Become Immortal II CAM EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/923-become-immortal-ii-cam/"
+  },
+  {
+    "unlock_date": "2025-04-29",
+    "expires_on": "2025-05-06",
+    "cost": "25,000",
+    "requirements": {
+      "Overall": "Max. 90",
+      "Max PS": "9",
+      "Max PS+": "2",
+      "Pace": "Max. 90",
+      "Shooting": "Max. 80",
+      "Dribbling": "Max. 90"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "PlayStyle+": "Intercept(^2)",
+      "PlayStyle": "Aerial(^9)",
+      "Overall": "+1(^91)",
+      "Defending": "+6(^91)",
+      "Physicality": "+6(^91)"
+    },
+    "challenges": [
+      "Play 3 matches in any mode using your active EVO player in game.",
+      "Win 1 match in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Intercept (^9)",
+          "PlayStyle Anticipate (^9)",
+          "PlayStyle Bruiser (^9)",
+          "Overall +1 (^91)",
+          "Physicality +2 (^91)",
+          "Defending +4 (^91)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Evolutions III",
+          "PlayStyle+ Intercept (^2)",
+          "PlayStyle Jockey (^9)",
+          "PlayStyle Aerial (^9)",
+          "Defending +2 (^91)",
+          "Physicality +4 (^91)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "943-defensive-driver",
+    "name": "Defensive Driver EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/943-defensive-driver/"
+  },
+  {
+    "unlock_date": "2025-04-30",
+    "expires_on": "2025-05-07",
+    "cost": "25,000",
+    "requirements": {
+      "Overall": "Max. 89",
+      "Max PS": "9",
+      "Pace": "Max. 93",
+      "Dribbling": "Max. 90"
+    },
+    "total_upgrades": {},
+    "challenges": [],
+    "upgrades": [],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "evolutions",
+    "name": "EA SPORTS FC 25 Evolutions",
+    "url": "https://www.fut.gg/evolutions/"
+  },
+  {
+    "unlock_date": "2025-04-19",
+    "expires_on": "2025-05-03",
+    "cost": "10,000",
+    "requirements": {
+      "Overall": "Max. 90",
+      "Position": "RB",
+      "Excluded Position": "CB",
+      "Max PS": "9",
+      "Max PS+": "2",
+      "Pace": "Max. 93"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "SM": "+1 ★(^4)",
+      "WF": "+1 ★(^4)",
+      "Role++": "RB Fullback++",
+      "Role+": "RB Wingback+",
+      "PlayStyle+": "Bruiser(^2)",
+      "PlayStyle": "Intercept(^9)",
+      "Overall": "+4(^92)",
+      "Pace": "+6(^93)",
+      "Dribbling": "+6(^87)",
+      "Defending": "+6(^90)",
+      "Physicality": "+6(^90)",
+      "Passing": "+10(^90)"
+    },
+    "challenges": [],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "WF +1 ★ (^4)",
+          "PlayStyle Jockey (^9)",
+          "PlayStyle Intercept (^9)",
+          "Overall +2 (^93)",
+          "Pace +6 (^93)",
+          "Dribbling +6 (^87)",
+          "Defending +6 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Evolutions III",
+          "SM +1 ★ (^4)",
+          "Role++ RB Fullback++",
+          "Role+ RB Wingback+",
+          "PlayStyle+ Bruiser (^2)",
+          "Overall +2 (^92)",
+          "Physicality +6 (^90)",
+          "Passing +10 (^90)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "924-the-test-of-time",
+    "name": "The Test of Time EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/924-the-test-of-time/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS": "6"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle": "Low Driven Shot(^6)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle Power Shot (^6)",
+          "PlayStyle Low Driven Shot (^6)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "920-immortal-low-driven-power-shot",
+    "name": "Immortal Low Driven & Power Shot EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/920-immortal-low-driven-power-shot/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Finesse Shot(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Finesse Shot (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "933-immortal-finesse-shot",
+    "name": "Immortal Finesse Shot+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/933-immortal-finesse-shot/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Intercept(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Intercept (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "930-immortal-intercept",
+    "name": "Immortal Intercept+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/930-immortal-intercept/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Technical(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Technical (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "932-immortal-technical",
+    "name": "Immortal Technical+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/932-immortal-technical/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Max Pos.": "3",
+      "Overall": "Max. 88"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "New Pos.": "CDM(^4)",
+      "SM": "+1 ★(^4)",
+      "WF": "+1 ★(^4)",
+      "Role++": "CM Box-To-Box++",
+      "Overall": "+2(^90)",
+      "Dribbling": "+5(^84)",
+      "Passing": "+10(^88)",
+      "Shooting": "+10(^83)",
+      "Pace": "+15(^86)",
+      "Defending": "+20(^90)",
+      "Physicality": "+20(^85)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. CDM (^4)",
+          "Role++ CDM Deep-Lying Playmaker++",
+          "Role++ CM Box-To-Box++",
+          "Overall +2 (^90)",
+          "Passing +10 (^88)",
+          "Pace +15 (^86)",
+          "Defending +20 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "SM +1 ★ (^4)",
+          "WF +1 ★ (^4)",
+          "Role++ CDM Holding++",
+          "Dribbling +5 (^84)",
+          "Shooting +10 (^83)",
+          "Physicality +20 (^85)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "922-become-immortal-ii-cdm",
+    "name": "Become Immortal II CDM EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/922-become-immortal-ii-cdm/"
+  },
+  {
+    "unlock_date": "2025-04-20",
+    "expires_on": "2025-04-27",
+    "cost": "",
+    "requirements": {
+      "Overall": "Max. 90",
+      "Max PS": "10",
+      "Max PS+": "2",
+      "Passing": "Max. 89",
+      "Dribbling": "Max. 92",
+      "Defending": "Max. 70",
+      "Physicality": "Max. 84"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "SM": "+1 ★(^4)",
+      "WF": "+2 ★",
+      "PlayStyle+": "Rapid(^2)",
+      "PlayStyle": "Trivela(^10)",
+      "Overall": "+3(^92)",
+      "Passing": "+2(^85)",
+      "Pace": "+5(^93)",
+      "Dribbling": "+5(^91)",
+      "Penalties": "+5(^85)",
+      "Shot Power": "+7(^89)",
+      "Long Shots": "+7(^89)",
+      "Stamina": "+10(^92)",
+      "Heading Accuracy": "+10(^90)",
+      "Positioning": "+10(^93)",
+      "Finishing": "+10(^94)",
+      "Volleys": "+10(^90)"
+    },
+    "challenges": [
+      "Play 2 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "SM +1 ★ (^4)",
+          "PlayStyle Finesse Shot (^10)",
+          "Overall +1 (^92)",
+          "Passing +2 (^85)",
+          "Pace +5 (^93)",
+          "Stamina +10 (^92)",
+          "Heading Accuracy +10 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Quick Step (^10)",
+          "PlayStyle Trivela (^10)",
+          "Overall +1 (^92)",
+          "Shot Power +7 (^89)",
+          "Long Shots +7 (^89)",
+          "Positioning +10 (^93)",
+          "Finishing +10 (^94)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle+ Finesse Shot (^2)",
+          "PlayStyle First Touch (^10)",
+          "Overall +1 (^92)",
+          "Dribbling +5 (^91)",
+          "Penalties +5 (^85)",
+          "Volleys +10 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 4,
+        "description": [
+          "Rarity Evolutions III",
+          "WF +2 ★",
+          "PlayStyle+ Rapid (^2)",
+          "PlayStyle Flair (^10)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "927-tu-eres-mi-idolo-ii",
+    "name": "Tú Eres Mi Ídolo II EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/927-tu-eres-mi-idolo-ii/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 91"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "Role++": "CM Playmaker++",
+      "Overall": "+1",
+      "Physicality": "+1(^91)",
+      "Shooting": "+2(^90)",
+      "Passing": "+2(^93)",
+      "Defending": "+2(^92)",
+      "Dribbling": "+3(^92)"
+    },
+    "challenges": [
+      "Play 2 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "Overall +1",
+          "Shooting +2 (^90)",
+          "Passing +2 (^93)",
+          "Dribbling +3 (^92)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "Role++ CM Playmaker++",
+          "Physicality +1 (^91)",
+          "Defending +2 (^92)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "935-91-to-92-become-immortal",
+    "name": "91 to 92 Become Immortal EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/935-91-to-92-become-immortal/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "PlayStyle+": "Quick Step(^2)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "PlayStyle+ Quick Step (^2)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "929-immortal-quick-step",
+    "name": "Immortal Quick Step+ EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/929-immortal-quick-step/"
+  },
+  {
+    "unlock_date": "2025-04-18",
+    "expires_on": "2025-04-25",
+    "cost": "100,000",
+    "requirements": {
+      "Max Pos.": "3",
+      "Overall": "Max. 90",
+      "Position": "CB",
+      "Max PS": "9",
+      "Max PS+": "2",
+      "Pace": "Max. 88",
+      "Physicality": "Max. 89"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "New Pos.": "CAM(^4)",
+      "SM": "+2 ★(^4)",
+      "WF": "+2 ★(^5)",
+      "Role++": "CAM Shadow Striker++",
+      "Role+": "CAM Classic 10+",
+      "PlayStyle+": "Anticipate(^2)",
+      "PlayStyle": "Aerial(^9)",
+      "Overall": "+8(^92)",
+      "Defending": "+5(^89)",
+      "Physicality": "+5(^89)",
+      "Pace": "+8(^88)",
+      "Agility": "+30(^90)",
+      "Balance": "+30(^90)",
+      "Passing": "+30(^93)",
+      "Ball Control": "+30(^92)",
+      "Dribbling (attr.)": "+30(^91)",
+      "Reactions": "+30(^92)",
+      "Composure": "+30(^93)",
+      "Shooting": "+45(^89)"
+    },
+    "challenges": [
+      "Play 3 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. CAM (^4)",
+          "Role+ CAM Classic 10+",
+          "PlayStyle Incisive Pass (^9)",
+          "PlayStyle Anticipate (^9)",
+          "Overall +2 (^92)",
+          "Pace +4 (^88)",
+          "Shooting +25 (^89)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "Role+ CB Defender+",
+          "PlayStyle Tiki Taka (^9)",
+          "PlayStyle Technical (^9)",
+          "Overall +2 (^92)",
+          "Defending +5 (^89)",
+          "Agility +30 (^90)",
+          "Balance +30 (^90)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle+ Incisive Pass (^2)",
+          "PlayStyle Aerial (^9)",
+          "Overall +2 (^92)",
+          "Pace +4 (^88)",
+          "Passing +30 (^93)",
+          "Ball Control +30 (^92)",
+          "Dribbling (attr.) +30 (^91)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 4,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "WF +2 ★ (^5)",
+          "Role++ CAM Playmaker++",
+          "PlayStyle Pinged Pass (^9)",
+          "Overall +2 (^92)",
+          "Shooting +20 (^89)",
+          "Reactions +30 (^92)",
+          "Composure +30 (^93)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 5,
+        "description": [
+          "Rarity Evolutions III",
+          "SM +2 ★ (^4)",
+          "Role++ CB Ball-Playing Defender++",
+          "Role++ CAM Shadow Striker++",
+          "PlayStyle+ Anticipate (^2)",
+          "Physicality +5 (^89)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "915-the-president",
+    "name": "The President EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/915-the-president/"
+  },
+  {
+    "unlock_date": "2025-04-19",
+    "expires_on": "2025-04-26",
+    "cost": "",
+    "requirements": {
+      "Max Pos.": "2",
+      "Overall": "Max. 90",
+      "Position": "RW, RM",
+      "Max PS": "9",
+      "Pace": "Max. 93",
+      "Shooting": "Max. 88",
+      "Physicality": "Max. 87"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "New Pos.": "CM(^4)",
+      "Role++": "CM Deep-Lying Playmaker++",
+      "Role+": "CM Box-To-Box+",
+      "PlayStyle": "Intercept(^9)",
+      "Overall": "+10(^92)",
+      "Passing": "+3(^88)",
+      "Dribbling": "+3(^92)",
+      "Pace": "+8(^93)",
+      "Physicality": "+15(^87)",
+      "Defending": "+45(^89)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. RB (^4)",
+          "Role+ RB Falseback+",
+          "PlayStyle Intercept (^9)",
+          "Overall +3 (^92)",
+          "Pace +5 (^93)",
+          "Defending +20 (^89)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "New Pos. CM (^4)",
+          "Role+ CM Box-To-Box+",
+          "PlayStyle Jockey (^9)",
+          "Overall +3 (^92)",
+          "Passing +3 (^88)",
+          "Physicality +15 (^87)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "Role++ CM Deep-Lying Playmaker++",
+          "PlayStyle Pinged Pass (^9)",
+          "Overall +2 (^92)",
+          "Pace +3 (^93)",
+          "Defending +15 (^89)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 4,
+        "description": [
+          "Rarity Evolutions III",
+          "Role++ RB Fullback++",
+          "PlayStyle Dead Ball (^9)",
+          "PlayStyle Long Ball Pass (^9)",
+          "Overall +2 (^92)",
+          "Dribbling +3 (^92)",
+          "Defending +10 (^89)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "925-jack-of-all-trades",
+    "name": "Jack Of All Trades EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/925-jack-of-all-trades/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "150,000",
+    "requirements": {
+      "Player": "Seydou Doumbia",
+      "Rarity": "Streets Won't Forget",
+      "Position": "ST",
+      "Max PS": "10",
+      "Max PS+": "1"
+    },
+    "total_upgrades": {
+      "Rarity": "Streets Won't Forget",
+      "WF": "+1 ★",
+      "Role++": "ST False 9++",
+      "PlayStyle+": "Quick Step(^2)",
+      "PlayStyle": "Aerial",
+      "Overall": "+8",
+      "Pace": "+1",
+      "Defending": "+5",
+      "Physicality": "+7",
+      "Shooting": "+8",
+      "Dribbling": "+9",
+      "Passing": "+16"
+    },
+    "challenges": [
+      "Play 3 matches in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game.",
+      "Win 1 match in Rush, Rivals, Champions, or Squad Battles on Min. Semi-Pro using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Power Shot (^10)",
+          "Overall +8",
+          "Pace +1",
+          "Shooting +8",
+          "Passing +16"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "WF +1 ★",
+          "PlayStyle Relentless (^10)",
+          "Defending +5",
+          "Physicality +7",
+          "Dribbling +9"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 3,
+        "description": [
+          "Rarity Streets Won't Forget",
+          "Role++ ST False 9++",
+          "PlayStyle+ Quick Step (^2)",
+          "PlayStyle Rapid",
+          "PlayStyle Aerial"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "877-streets-wont-forget-doumbia",
+    "name": "Streets Won't Forget - Doumbia EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/877-streets-wont-forget-doumbia/"
+  },
+  {
+    "unlock_date": "2025-04-27",
+    "expires_on": "2025-05-04",
+    "cost": "80,000",
+    "requirements": {
+      "Overall": "Max. 90",
+      "Max PS": "9",
+      "Max PS+": "2",
+      "Pace": "Max. 92",
+      "Dribbling": "Max. 89",
+      "Defending": "Max. 77",
+      "Physicality": "Max. 87"
+    },
+    "total_upgrades": {
+      "Rarity": "Evolutions III",
+      "PlayStyle+": "Power Shot(^2)",
+      "PlayStyle": "Low Driven Shot(^9)",
+      "Overall": "+2",
+      "Shooting": "+40"
+    },
+    "challenges": [
+      "Play 5 matches in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "PlayStyle Finesse Shot (^9)",
+          "PlayStyle Chip Shot (^9)",
+          "PlayStyle Power Shot (^9)",
+          "Overall +1",
+          "Shooting +20"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Evolutions III",
+          "PlayStyle+ Power Shot (^2)",
+          "PlayStyle Trivela (^9)",
+          "PlayStyle Low Driven Shot (^9)",
+          "Overall +1",
+          "Shooting +20"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "942-golazo",
+    "name": "Golazo EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/942-golazo/"
+  },
+  {
+    "unlock_date": "2025-04-25",
+    "expires_on": "2025-05-02",
+    "cost": "",
+    "requirements": {
+      "Max Pos.": "2",
+      "Overall": "Max. 85",
+      "Position": "CM",
+      "Max PS": "6",
+      "Max PS+": "2"
+    },
+    "total_upgrades": {
+      "Rarity": "Become Immortal Hero",
+      "SM": "+2 ★(^4)",
+      "WF": "+2 ★(^4)",
+      "Overall": "+41(^88)",
+      "Dribbling": "+45(^83)",
+      "Physicality": "+45(^81)",
+      "Pace": "+50(^85)",
+      "Shooting": "+50(^82)",
+      "Defending": "+50(^81)",
+      "Passing": "+60(^88)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "Rarity In-Progress Evolution",
+          "Overall +41 (^88)",
+          "Dribbling +45 (^83)",
+          "Physicality +45 (^81)",
+          "Pace +50 (^85)",
+          "Shooting +50 (^82)",
+          "Defending +50 (^81)",
+          "Passing +60 (^88)"
+        ],
+        "effects": {}
+      },
+      {
+        "step": 2,
+        "description": [
+          "Rarity Become Immortal Hero",
+          "SM +2 ★ (^4)",
+          "WF +2 ★ (^4)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "916-become-immortal-i",
+    "name": "Become Immortal I EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/916-become-immortal-i/"
+  },
+  {
+    "unlock_date": "2025-04-24",
+    "expires_on": "2025-04-30",
+    "cost": "",
+    "requirements": {
+      "Rarity": "Become Immortal Hero",
+      "Overall": "Max. 92"
+    },
+    "total_upgrades": {
+      "SM": "+4 ★(^5)",
+      "WF": "+3 ★(^4)"
+    },
+    "challenges": [
+      "Play 1 match in any mode using your active EVO player in game."
+    ],
+    "upgrades": [
+      {
+        "step": 1,
+        "description": [
+          "SM +4 ★ (^5)",
+          "WF +3 ★ (^4)"
+        ],
+        "effects": {}
+      }
+    ],
+    "new_positions": [],
+    "playstyles_added": [],
+    "playstyles_plus_added": [],
+    "final_bonus": {},
+    "id": "937-5-sm4-wf-become-immortal",
+    "name": "5* SM/4* WF Become Immortal EA FC 25 Evolution",
+    "url": "https://www.fut.gg/evolutions/937-5-sm4-wf-become-immortal/"
+  }
+]
