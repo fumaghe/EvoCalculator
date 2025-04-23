@@ -1,80 +1,70 @@
-// src/components/EvoSelector.tsx
 import React, { useEffect, useState } from 'react';
-import { CheckCircle, Circle } from 'lucide-react';
-
-export interface Evolution {
-  id: string;
-  name: string;
-  unlock_date: string;
-  expires_on: string;
-  cost: string;
-  requirements: { [key: string]: string };
-  total_upgrades?: { [key: string]: string };
-  challenges: string[];
-  upgrades: {
-    step: number;
-    description: string[];
-    effects: { [key: string]: number };
-  }[];
-  new_positions: string[];
-  playstyles_added: string[];
-  playstyles_plus_added: string[];
-  final_bonus: { [key: string]: string } | {};
-  url: string;
-}
+import { Check } from 'lucide-react';
+import { Evolution } from '../types';
 
 interface EvoSelectorProps {
-  onSelectionChange: (selectedEvos: Evolution[]) => void;
+  onSelectionChange: (selected: Evolution[]) => void;
 }
 
-const EvoSelector: React.FC<EvoSelectorProps> = ({ onSelectionChange }) => {
-  const [evolutions, setEvolutions] = useState<Evolution[]>([]);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+export default function EvolutionSelector({ onSelectionChange }: EvoSelectorProps) {
+  const [allEvos, setAllEvos] = useState<Evolution[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const loadEvos = async () => {
-      try {
-        const res = await fetch('/data/evo.json');
-        const data = await res.json();
-        setEvolutions(data);
-      } catch (error) {
-        console.error('Errore nel caricamento delle evoluzioni:', error);
-      }
-    };
-    loadEvos();
+    fetch('/data/evo.json')
+      .then(res => res.json())
+      .then((data: Evolution[]) => setAllEvos(data))
+      .catch(console.error);
   }, []);
 
-  const handleToggle = (id: string) => {
-    let newSelectedIds: string[];
-    if (selectedIds.includes(id)) {
-      newSelectedIds = selectedIds.filter(eid => eid !== id);
-    } else {
-      newSelectedIds = [...selectedIds, id];
-    }
-    setSelectedIds(newSelectedIds);
-    const selectedEvos = evolutions.filter(evo => newSelectedIds.includes(evo.id));
-    onSelectionChange(selectedEvos);
+  const toggle = (id: string) => {
+    const next = new Set(selectedIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setSelectedIds(next);
+    onSelectionChange(allEvos.filter(evo => next.has(evo.id)));
   };
 
+  const filtered = allEvos.filter(evo =>
+    evo.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Seleziona Evoluzioni</h2>
-      <div className="max-h-60 overflow-y-auto">
-        {evolutions.map(evo => (
-          <div key={evo.id} className="flex items-center justify-between p-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-gray-800 dark:text-white">{evo.name}</span>
-            <button onClick={() => handleToggle(evo.id)} className="p-2 focus:outline-none">
-              {selectedIds.includes(evo.id) ? (
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-400" />
-              )}
+    <div className="bg-surface dark:bg-surface-dark rounded-2xl p-6 shadow-md mb-6">
+      <h2 className="text-xl font-semibold text-text-light mb-4">
+        Seleziona Evoluzioni
+      </h2>
+
+      <input
+        type="text"
+        placeholder="🔍 Cerca evoluzione..."
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
+        className="w-full mb-4 p-3 border border-surface-dark rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+
+      <div className="flex flex-wrap gap-3 max-h-60 overflow-y-auto">
+        {filtered.map(evo => {
+          const isSel = selectedIds.has(evo.id);
+          return (
+            <button
+              key={evo.id}
+              onClick={() => toggle(evo.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-transform duration-200 flex items-center gap-2
+                ${isSel
+                  ? 'bg-primary text-background scale-105'
+                  : 'bg-surface-dark text-text-dark hover:bg-surface hover:text-text-light'}`
+            }
+            >
+              {evo.name}
+              {isSel && <Check size={14} className="text-background" />}
             </button>
-          </div>
-        ))}
+          );
+        })}
+        {filtered.length === 0 && (
+          <p className="text-text-dark">Nessuna evoluzione trovata.</p>
+        )}
       </div>
     </div>
   );
-};
-
-export default EvoSelector;
+}

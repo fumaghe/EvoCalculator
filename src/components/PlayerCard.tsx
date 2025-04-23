@@ -1,5 +1,3 @@
-// src/components/PlayerCard.tsx
-
 import React from 'react';
 
 interface PlayerCardProps {
@@ -15,52 +13,34 @@ interface PlayerCardProps {
   onClick?: () => void;
 }
 
-const PlayerCard: React.FC<PlayerCardProps> = ({
-  name,
-  overall,
-  position,
-  pace,
-  shooting,
-  passing,
-  dribbling,
-  defending,
-  physical,
+export default function PlayerCard({
+  name, overall, position,
+  pace, shooting, passing, dribbling, defending, physical,
   onClick
-}) => {
+}: PlayerCardProps) {
   return (
-    <div 
+    <div
       onClick={onClick}
-      className="border border-gray-300 rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
+      className="bg-card border border-accent rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow duration-200"
     >
-      {/* Header con nome e overall */}
       <div className="flex items-center justify-between mb-2">
-        <div className="font-bold text-lg">{name}</div>
-        <div className="font-extrabold text-xl text-blue-600">{overall}</div>
+        <div className="text-text-light font-bold text-lg">{name}</div>
+        <div className="text-accent font-extrabold text-xl">{overall}</div>
       </div>
-
-      {/* Ruolo */}
-      <div className="text-gray-600 mb-4">{position}</div>
-
-      {/* Face stats in una griglia 3x2 */}
+      <div className="text-text-base/80 mb-4">{position}</div>
       <div className="grid grid-cols-3 gap-2 text-center">
-        <FaceStat label="PAC" value={pace} />
-        <FaceStat label="SHO" value={shooting} />
-        <FaceStat label="PAS" value={passing} />
-        <FaceStat label="DRI" value={dribbling} />
-        <FaceStat label="DEF" value={defending} />
-        <FaceStat label="PHY" value={physical} />
+        {[ ['PAC', pace], ['SHO', shooting], ['PAS', passing],
+           ['DRI', dribbling], ['DEF', defending], ['PHY', physical]
+        ].map(([lbl, val])=>(
+          <div
+            key={lbl}
+            className="bg-background p-2 rounded-lg flex flex-col items-center"
+          >
+            <span className="text-xs font-semibold text-text-base">{lbl}</span>
+            <span className="text-sm font-bold text-text-light">{val}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
-};
-
-const FaceStat: React.FC<{ label: string; value: number }> = ({ label, value }) => {
-  return (
-    <div className="flex flex-col items-center bg-gray-100 p-2 rounded">
-      <span className="text-xs font-semibold text-gray-500">{label}</span>
-      <span className="text-sm font-bold text-gray-800">{value}</span>
-    </div>
-  );
-};
-
-export default PlayerCard;
+}
