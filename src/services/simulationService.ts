@@ -110,7 +110,6 @@ const MEMO_LIMIT = 10_000;
 
 export async function runSimulationPage(
   selectedEvos: Evolution[],
-  targetRole: string,
   skip: number,
   limit: number,
   searchQuery = ''
@@ -119,13 +118,7 @@ export async function runSimulationPage(
   const today = new Date();
   const wanted = skip + limit;
 
-  const filtered = players.filter((p) => {
-    const roles = [
-      ...p.Position.split(/[\/;]/).map((r) => r.trim().toUpperCase()),
-      ...p.alternativePositions.map((r) => r.toUpperCase()),
-    ];
-    return roles.includes(targetRole.toUpperCase());
-  });
+  const filtered = players; 
 
   const validEvos = selectedEvos.filter((e) => new Date(e.expires_on) >= today);
   if (!validEvos.length) return [];
