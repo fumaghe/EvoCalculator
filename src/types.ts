@@ -13,5 +13,6 @@ export interface Evolution {
     playstyles_plus_added: string[];
     final_bonus: Record<string, string>;
     url: string;
+    total_upgrades?: Record<string, string>;
   }
   

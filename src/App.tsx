@@ -1,16 +1,24 @@
 import React from 'react';
-import { ThemeProvider } from './context/ThemeContext';
-import Layout from './Layout';
-import Dashboard from './components/Dashboard';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
+import { ThemeProvider } from './context/ThemeContext';
+import Layout      from './Layout';
+
+/* pagine */
+import Dashboard   from './components/Dashboard';
+import Evolutions  from './pages/Evolutions';
+
+export default function App() {
   return (
     <ThemeProvider>
       <Layout>
-        <Dashboard />
+        <Routes>
+          <Route path="/"            element={<Dashboard />} />
+          <Route path="/evolutions"  element={<Evolutions />} />
+          {/* fallback 404 → Dashboard */}
+          <Route path="*"            element={<Dashboard />} />
+        </Routes>
       </Layout>
     </ThemeProvider>
   );
 }
-
-export default App;

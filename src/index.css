@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Scrollbar lime e arrotondata per la timeline */
+.timeline-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+  .timeline-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    background: #84ff00;        /* lime fluo */
+    border-radius: 9999px;
+  }
+  /* Firefox */
+  .timeline-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #84ff00 transparent;
+  }
+  

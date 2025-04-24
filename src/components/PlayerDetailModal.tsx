@@ -2,64 +2,52 @@ import React, { useEffect, useState } from 'react';
 import { Stats } from '../services/simulationService';
 import { X, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 
-/* ─────────────────────────── meta & tipi ─────────────────────────── */
+/* ───── face stats meta ───── */
 const faceKeys: { k: keyof Stats; lbl: string }[] = [
-  { k: 'ovr', lbl: 'OVR' },
-  { k: 'pac', lbl: 'PAC' },
-  { k: 'sho', lbl: 'SHO' },
-  { k: 'pas', lbl: 'PAS' },
-  { k: 'dri', lbl: 'DRI' },
-  { k: 'def', lbl: 'DEF' },
-  { k: 'phy', lbl: 'PHY' }
+  { k: 'ovr', lbl: 'OVR' }, { k: 'pac', lbl: 'PAC' }, { k: 'sho', lbl: 'SHO' },
+  { k: 'pas', lbl: 'PAS' }, { k: 'dri', lbl: 'DRI' }, { k: 'def', lbl: 'DEF' }, { k: 'phy', lbl: 'PHY' }
 ];
 
-interface SecondaryGroup {
-  g: string;
-  k: string[];
-}
+/* ───── gruppi secondari ───── */
+interface SecondaryGroup { g: string; k: string[] }
 const secGroups: SecondaryGroup[] = [
-  { g: 'Pace',        k: ['Acceleration', 'Sprint Speed'] },
-  { g: 'Shooting',    k: ['Positioning', 'Finishing', 'Shot Power', 'Long Shots', 'Volleys', 'Penalties'] },
-  { g: 'Passing',     k: ['Vision', 'Crossing', 'Free Kick Accuracy', 'Short Passing', 'Long Passing', 'Curve'] },
-  { g: 'Dribbling',   k: ['Agility', 'Balance', 'Reactions', 'Ball Control', 'Dribbling', 'Composure'] },
-  { g: 'Defending',   k: ['Interceptions', 'Heading Accuracy', 'Def Awareness', 'Standing Tackle', 'Sliding Tackle'] },
-  { g: 'Physicality', k: ['Jumping', 'Stamina', 'Strength', 'Aggression'] }
+  { g:'Pace',        k:['Acceleration','Sprint Speed'] },
+  { g:'Shooting',    k:['Positioning','Finishing','Shot Power','Long Shots','Volleys','Penalties'] },
+  { g:'Passing',     k:['Vision','Crossing','Free Kick Accuracy','Short Passing','Long Passing','Curve'] },
+  { g:'Dribbling',   k:['Agility','Balance','Reactions','Ball Control','Dribbling','Composure'] },
+  { g:'Defending',   k:['Interceptions','Heading Accuracy','Def Awareness','Standing Tackle','Sliding Tackle'] },
+  { g:'Physicality', k:['Jumping','Stamina','Strength','Aggression'] },
 ];
 
-/* ---------- parse di un’unica riga “Pace +2” ---------- */
+/* ───── parser riga upgrade (face stat) ───── */
 function parseLine(line: string): { stat?: keyof Stats; delta?: number } {
   const map: Record<string, keyof Stats> = {
-    Overall: 'ovr', Pace: 'pac', Shooting: 'sho', Passing: 'pas',
-    Dribbling: 'dri', Defending: 'def', Physicality: 'phy',
-    'Skill Moves': 'skillMoves', 'Weak Foot': 'weakFoot'
+    Overall:'ovr', Pace:'pac', Shooting:'sho', Passing:'pas',
+    Dribbling:'dri', Defending:'def', Physicality:'phy'
   };
-  const m = line.match(/^([\w\.\s]+)\s+([+\-]\d+)/);    // es. "Pace +2"
+  const m = line.match(/^([\w\.\s]+)\s+([+\-]\d+)/);
   if (!m) return {};
   const stat = map[m[1].trim()];
-  if (!stat) return {};
-  return { stat, delta: +m[2] };
+  return stat ? { stat, delta: +m[2] } : {};
 }
 
-/* ---------- props ---------- */
+/* ───── props ───── */
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean; onClose: () => void;
   name: string;
   evolutionOrder: string[];
   roles: string[];
-  playstyles: string[];
-  playstylesPlus: string[];
-  generalStatsBefore: Stats;
-  generalStatsAfter: Stats;
-  detailedStatsBefore: Record<string, number>;
-  detailedStats: Record<string, number>;
+  playstyles: string[]; playstylesPlus: string[];
+  generalStatsBefore: Stats; generalStatsAfter: Stats;
+  detailedStatsBefore: Record<string, number>; detailedStats: Record<string, number>;
 }
 
-/* ─────────────────────────── component ─────────────────────────── */
+/* ───── component ───── */
 const PlayerDetailModal: React.FC<ModalProps> = (p) => {
-  const [ideal, setIdeal] = useState<Record<string, Partial<Record<keyof Stats, number>>>>({});
+  /* mappa <nome evo> → delta teorici */
+  const [ideal, setIdeal] =
+    useState<Record<string, Partial<Record<keyof Stats, number>>>>({});
 
-  /* fetch evo.json una sola volta */
   useEffect(() => {
     fetch('/data/evo.json')
       .then(r => r.json())
@@ -82,35 +70,30 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
 
   if (!p.isOpen) return null;
 
-  /* ---------- costruiamo gli step (interp.) ---------- */
+  /* ----- costruzione step (interpolazione placeholder) ----- */
   const n = p.evolutionOrder.length;
   const steps: { name: string; stats: Stats }[] = [
     { name: 'Base', stats: { ...p.generalStatsBefore } }
   ];
   p.evolutionOrder.forEach((evo, idx) => {
-    const t: Stats = { ...p.generalStatsBefore };
     const factor = (idx + 1) / n;
+    const s: Stats = { ...p.generalStatsBefore };
     faceKeys.forEach(({ k }) => {
       const diff = p.generalStatsAfter[k] - p.generalStatsBefore[k];
-      t[k] = Math.round(p.generalStatsBefore[k] + diff * factor);
+      s[k] = Math.round(p.generalStatsBefore[k] + diff * factor);
     });
-    steps.push({ name: evo, stats: t });
+    steps.push({ name: evo, stats: s });
   });
 
-  /* ---------- efficienza step ---------- */
-  const efficiency = (idx: number) => {
-    if (idx === 0) return { label: '—', color: '' };
-    const prev = steps[idx - 1].stats;
-    const curr = steps[idx].stats;
-    const evo = steps[idx].name;
+  /* ----- efficienza step ----- */
+  const eff = (i: number) => {
+    if (i === 0) return { label: '—', color: '' };
+    const prev = steps[i - 1].stats, curr = steps[i].stats, evo = steps[i].name;
     const idealMap = ideal[evo] || {};
-
-    const realGain = faceKeys.slice(1).reduce((s, { k }) => s + (curr[k] - prev[k]), 0);
-    const idealGain = Object.values(idealMap).reduce((s, v) => s + (v || 0), 0);
-
-    if (!idealGain) return { label: '—', color: '' };
-
-    const perc = Math.round((realGain / idealGain) * 100);
+    const real = faceKeys.slice(1).reduce((s, { k }) => s + (curr[k] - prev[k]), 0);
+    const idealSum = Object.values(idealMap).reduce((s, v) => s + (v || 0), 0);
+    if (!idealSum) return { label: '—', color: '' };
+    const perc = Math.round((real / idealSum) * 100);
     const color = perc >= 80 ? 'text-green-400' : perc >= 50 ? 'text-yellow-400' : 'text-red-500';
     return { label: `${perc}%`, color };
   };
@@ -121,7 +104,7 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
     ...p.playstylesPlus.map(x => ({ txt: x + '+', plus: true }))
   ];
 
-  /* ──────────────────── RENDER ──────────────────── */
+  /* ───────────────────── render ───────────────────── */
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
       <div className="relative flex flex-col lg:flex-row bg-[#1b1b1b] rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
@@ -131,7 +114,7 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
           <X className="w-6 h-6" />
         </button>
 
-        {/* LEFT – carta finale */}
+        {/* LEFT – final card */}
         <aside className="w-full lg:w-1/3 p-6 bg-[#161616] flex flex-col items-center gap-6 overflow-y-auto scrollbar-hide">
           <h3 className="text-lime-400 font-bold text-center text-xl">
             {p.name} – {p.generalStatsAfter.ovr} OVR
@@ -175,51 +158,46 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
           )}
         </aside>
 
-        {/* RIGHT – timeline + stats */}
+        {/* RIGHT – timeline + advanced */}
         <section className="flex-1 flex flex-col overflow-hidden">
           <h3 className="text-center text-gray-200 font-semibold mt-6">Evolution timeline</h3>
 
+          {/* timeline */}
           <div className="relative mt-4 px-8">
-            <div id="tl-track" className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+            <div id="tl-track" className="timeline-scroll flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
 
               {steps.map(({ name, stats }, idx) => {
                 const prev = idx > 0 ? steps[idx - 1].stats : stats;
-                const deltas = faceKeys
-                  .slice(1)
-                  .map(({ k, lbl }) => {
-                    const d = stats[k] - prev[k];
-                    return d > 0 ? `${lbl}+${d}` : null;
-                  })
-                  .filter(Boolean)
-                  .join(' | ');
-
-                const eff = efficiency(idx);
+                const effObj = eff(idx);
 
                 return (
-                  <div key={idx} className="min-w-[200px] shrink-0 bg-[#202020] rounded-lg p-3 snap-start">
-                    <h4 className={`text-center font-semibold mb-2 ${idx === 0 ? 'text-white' : 'text-lime-400'}`}>
+                  <div key={idx} className="min-w-[220px] shrink-0 bg-[#202020] rounded-lg p-4 snap-start">
+                    <h4 className={`text-center font-semibold mb-3 ${idx === 0 ? 'text-white' : 'text-lime-400'}`}>
                       {name}
                     </h4>
 
-                    <ul className="grid grid-cols-2 gap-1 text-[11px] text-gray-300 mb-1">
-                      {faceKeys.map(({ k, lbl }) => (
-                        <li key={k} className="flex justify-between">
-                          <span>{lbl}</span>
-                          <span className="font-bold">{stats[k]}</span>
-                        </li>
-                      ))}
+                    <ul className="grid grid-cols-2 gap-1 text-[11px]">
+                      {faceKeys.map(({ k, lbl }) => {
+                        const delta = stats[k] - prev[k];
+                        return (
+                          <li key={k} className="flex justify-between">
+                            <span className="text-gray-300">{lbl}</span>
+                            <span className={`font-bold ${delta > 0 ? 'text-lime-400' : 'text-gray-300'}`}>
+                              {stats[k]}
+                              {delta > 0 && <span className="ml-0.5">+{delta}</span>}
+                            </span>
+                          </li>
+                        );
+                      })}
                     </ul>
 
                     {idx > 0 && (
-                      <>
-                        <p className="text-[10px] text-gray-400 truncate">{deltas}</p>
-                        <div className="flex items-center justify-end gap-1 mt-1 text-xs">
-                          <span title="Efficiency = real gain / theoretical gain">
-                            <Info className="w-3 h-3 text-gray-400" />
-                          </span>
-                          <span className={eff.color}>{eff.label}</span>
-                        </div>
-                      </>
+                      <div className="flex items-center justify-end gap-1 mt-2 text-xs">
+                        <span title="Efficiency = real gain / theoretical gain">
+                          <Info className="w-3 h-3 text-gray-400" />
+                        </span>
+                        <span className={effObj.color}>{effObj.label}</span>
+                      </div>
                     )}
                   </div>
                 );
@@ -227,16 +205,12 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
             </div>
 
             {/* arrows */}
-            <button
-              onClick={() => document.getElementById('tl-track')?.scrollBy({ left: -220, behavior: 'smooth' })}
-              className="absolute -left-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]"
-            >
+            <button onClick={() => document.getElementById('tl-track')?.scrollBy({ left: -240, behavior: 'smooth' })}
+              className="absolute -left-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]">
               <ChevronLeft size={16} />
             </button>
-            <button
-              onClick={() => document.getElementById('tl-track')?.scrollBy({ left: 220, behavior: 'smooth' })}
-              className="absolute -right-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]"
-            >
+            <button onClick={() => document.getElementById('tl-track')?.scrollBy({ left: 240, behavior: 'smooth' })}
+              className="absolute -right-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]">
               <ChevronRight size={16} />
             </button>
           </div>
@@ -247,16 +221,16 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
               <div key={g} className="mb-6">
                 <h4 className="text-gray-200 font-medium mb-2">{g}</h4>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2 text-xs">
-                  {k.map((s: string) => {
+                  {k.map(s => {
                     const before = p.detailedStatsBefore[s] ?? 0;
-                    const after = p.detailedStats[s] ?? 0;
-                    const delta = after - before;
+                    const after  = p.detailedStats[s] ?? 0;
+                    const d = after - before;
                     return (
                       <div key={s} className="bg-[#202020] rounded-lg p-2 flex justify-between">
                         <span className="text-gray-300 truncate">{s}</span>
                         <span className="font-bold">
                           {after}
-                          {delta > 0 && <span className="text-green-400 ml-1">+{delta}</span>}
+                          {d > 0 && <span className="text-green-400 ml-1">+{d}</span>}
                         </span>
                       </div>
                     );

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { ChevronRight, SlidersHorizontal } from 'lucide-react';
-import EvoSelector from './EvoSelector';
-import SimulationPanel from './SimulationPanel';
+import EvoSelector       from './EvoSelector';
+import SimulationPanel   from './SimulationPanel';
 import FilterPanel, { Filters } from './FilterPanel';
-import { Evolution } from '../types';
+import { Evolution }     from '../types';
 
 export default function Dashboard() {
-  const [filterOpen, setFilterOpen]   = useState(false);
-  const [selected, setSelected]       = useState<Evolution[]>([]);
+
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selected,   setSelected]   = useState<Evolution[]>([]);
+
+  /* 🔑 unico stato filtri */
   const [filters, setFilters] = useState<Filters>({
     statRanges: { ovr:[0,99], pac:[0,99], sho:[0,99], pas:[0,99], dri:[0,99], def:[0,99], phy:[0,99] },
     skillMoves:[0,5],
@@ -42,11 +45,14 @@ export default function Dashboard() {
         </div>
 
         {/* simulation panel */}
-        <SimulationPanel selectedEvos={selected} />
+        <SimulationPanel
+          selectedEvos={selected}
+          filters={filters}          /* ⬅ prop filtri unificati */
+        />
 
       </div>
 
-      {/* drawer */}
+      {/* unico drawer filtri */}
       <FilterPanel
         isOpen={filterOpen}
         onClose={() => setFilterOpen(false)}

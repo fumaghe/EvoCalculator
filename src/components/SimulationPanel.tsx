@@ -7,72 +7,82 @@ import {
 import {
   Code,
   Loader,
-  Filter as FilterIcon,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import PlayerCard from './PlayerCard';
+import PlayerCard        from './PlayerCard';
 import PlayerDetailModal from './PlayerDetailModal';
-import FilterPanel, { Filters } from './FilterPanel';
+import type { Filters }  from './FilterPanel';
 
-interface Props { selectedEvos: Evolution[] }
+interface Props {
+  selectedEvos: Evolution[];
+  filters: Filters;                           // ⬅ ricevi i filtri dal padre
+}
 
 const RESULTS_PER_PAGE = 30;
 
-const SimulationPanel: React.FC<Props> = ({ selectedEvos }) => {
-  const [results, setResults] = useState<SimulationResult[]>([]);
+const SimulationPanel: React.FC<Props> = ({ selectedEvos, filters }) => {
+
+  const [results,   setResults]   = useState<SimulationResult[]>([]);
   const [displayed, setDisplayed] = useState<SimulationResult[]>([]);
-  const [loading, setLoading]     = useState(false);
+  const [hasNext,   setHasNext]   = useState(false);     // ✔ flag per il next
+  const [loading,   setLoading]   = useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = useState<SimulationResult|null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen,      setModalOpen]      = useState(false);
 
-  const [page, setPage] = useState(1);
+  const [page,  setPage]  = useState(1);
   const [query, setQuery] = useState('');
 
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [filters, setFilters] = useState<Filters>({
-    statRanges:{ ovr:[0,99], pac:[0,99], sho:[0,99], pas:[0,99], dri:[0,99], def:[0,99], phy:[0,99] },
-    skillMoves:[0,5],
-    weakFoot:  [0,5],
-    playstyles:[],
-    playstylesPlus:[],
-    roles:[]
-  });
 
-  /* ------------------------- fetch + filter + paginate ------------------------- */
-  const loadPage = async (p: number) => {
-    setLoading(true);
-
-    const raw = await runSimulationPage(selectedEvos, 0, 10_000, query);
-
-    const filtered = raw.filter(r => {
+  /** Ritorna solo i risultati che rispettano i filtri del padre */
+  const filterResults = (data: SimulationResult[]): SimulationResult[] => {
+    return data.filter(r => {
       const s = r.finalStats;
 
-      /* range check */
-      for (const [k,[min,max]] of Object.entries(filters.statRanges) as ([keyof Filters['statRanges'],[number,number]])[]) {
+      // intervalli facestats
+      for (const [k, [min, max]] of Object.entries(filters.statRanges) as
+            ([keyof Filters['statRanges'], [number, number]])[]) {
         if (s[k] < min || s[k] > max) return false;
       }
+
+      // skill-moves & weak-foot
       if (s.skillMoves < filters.skillMoves[0] || s.skillMoves > filters.skillMoves[1]) return false;
       if (s.weakFoot   < filters.weakFoot[0]   || s.weakFoot   > filters.weakFoot[1])   return false;
 
-      /* playstyles / roles */
-      if (filters.playstyles.some(x     => !r.playstyles.includes(x)))      return false;
-      if (filters.playstylesPlus.some(x => !r.playstylesPlus.includes(x)))  return false;
-      if (filters.roles.some(x          => !r.roles.includes(x)))           return false;
+      // array inclusivi
+      if (filters.playstyles.    some(x => !r.playstyles.    includes(x))) return false;
+      if (filters.playstylesPlus.some(x => !r.playstylesPlus.includes(x))) return false;
+      if (filters.roles.         some(x => !r.roles.         includes(x))) return false;
 
       return true;
     });
-
-    const start = (p-1) * RESULTS_PER_PAGE;
-    setResults(filtered);
-    setDisplayed(filtered.slice(start, start + RESULTS_PER_PAGE));
+  };
+  const loadPage = async (p: number) => {
+    setLoading(true);
+  
+    let skipRaw = (p - 1) * RESULTS_PER_PAGE;   // indice sui RECORD LORDI
+    let pageValid: SimulationResult[] = [];
+    let moreRaw  = true;                        // true finché il backend ha altri blocchi
+  
+    /* continua a chiedere blocchi da 30 finché non hai 30 validi
+       o finché i dati non finiscono                                         */
+    while (pageValid.length < RESULTS_PER_PAGE && moreRaw) {
+      const raw = await runSimulationPage(selectedEvos, skipRaw, RESULTS_PER_PAGE, query);
+      if (raw.length < RESULTS_PER_PAGE) moreRaw = false;          // ultimo blocco raggiunto
+      pageValid = [...pageValid, ...filterResults(raw)];           // aggiungi i validi
+      skipRaw  += RESULTS_PER_PAGE;                                // passa al blocco lordo successivo
+    }
+  
+    const slice = pageValid.slice(0, RESULTS_PER_PAGE);            // esattamente 30 (o <30 se finiti)
+    setDisplayed(slice);
+    setResults(slice);                                             // tienilo se ti serve altrove
+    setHasNext(slice.length === RESULTS_PER_PAGE && moreRaw);      // abilita “next” solo se serve
     setLoading(false);
   };
 
   const handleRun        = () => { setPage(1); loadPage(1); };
   const handlePageChange = (p:number) => { setPage(p); loadPage(p); };
-  const applyFilters     = () => { setPage(1); loadPage(1); setPanelOpen(false); };
 
   /* ---------------------------------- UI ---------------------------------- */
   return (
@@ -86,7 +96,7 @@ const SimulationPanel: React.FC<Props> = ({ selectedEvos }) => {
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search player..."
+            placeholder="Search player…"
             className="bg-[#202020] text-gray-200 placeholder-gray-500 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-lime-500 w-56"
           />
 
@@ -100,24 +110,8 @@ const SimulationPanel: React.FC<Props> = ({ selectedEvos }) => {
             }
             Run
           </button>
-
-          <button
-            onClick={() => setPanelOpen(true)}
-            className="flex items-center gap-2 bg-[#202020] hover:bg-[#262626] text-gray-200 px-4 py-2 rounded-full transition"
-          >
-            <FilterIcon className="w-4 h-4" /> Filters
-          </button>
         </div>
       </div>
-
-      {/* filter drawer */}
-      <FilterPanel
-        isOpen={panelOpen}
-        onClose={() => setPanelOpen(false)}
-        filters={filters}
-        setFilters={setFilters}
-        onApply={applyFilters}
-      />
 
       {/* body */}
       {loading && <p className="text-gray-400">Loading…</p>}
@@ -147,15 +141,15 @@ const SimulationPanel: React.FC<Props> = ({ selectedEvos }) => {
           <div className="flex justify-center items-center gap-4 mt-4">
             <button
               disabled={page === 1}
-              onClick={() => handlePageChange(page-1)}
+              onClick={() => handlePageChange(page - 1)}
               className="p-2 bg-[#202020] text-gray-300 rounded-full disabled:opacity-40 hover:bg-[#262626] transition"
             >
               <ChevronLeft size={18}/>
             </button>
             <span className="text-gray-300">Page {page}</span>
             <button
-              disabled={page * RESULTS_PER_PAGE >= results.length}
-              onClick={() => handlePageChange(page+1)}
+              disabled={!hasNext}      
+              onClick={() => handlePageChange(page + 1)}
               className="p-2 bg-[#202020] text-gray-300 rounded-full disabled:opacity-40 hover:bg-[#262626] transition"
             >
               <ChevronRight size={18}/>

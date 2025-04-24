@@ -1,5 +1,6 @@
 // src/services/simulationService.ts
-// Ottimizzato 2025‑04‑17 – pre‑process evoluzioni, backtracking, cache LRU sui memo
+// Ottimizzato 2025-04-23 – supporto posizioni multiple, controllo "Max Pos.", bug-fix requisiti statistiche
+// + debug console.log sui primi due giocatori per verifica requisiti
 
 /* -------------------------------------------------------------------------- */
 /*  TIPI E COSTANTI                                                           */
@@ -76,7 +77,15 @@ interface NodeState {
 }
 
 interface ParsedUpgrade {
-  type: 'stat' | 'playstyle' | 'playstylePlus' | 'newPos' | 'role' | 'rolePlus' | 'rarity' | 'unknown';
+  type:
+    | 'stat'
+    | 'playstyle'
+    | 'playstylePlus'
+    | 'newPos'
+    | 'role'
+    | 'rolePlus'
+    | 'rarity'
+    | 'unknown';
   key?: string;
   delta?: number;
   cap?: number;
@@ -102,7 +111,22 @@ interface SimulationOutcome {
 }
 
 const FACE_STAT_MAX = 99;
+const SKILL_WF_MAX = 5;
 const MEMO_LIMIT = 10_000;
+
+/** 
+ * Restituisce il cap effettivo per un upgrade: 
+ * - se esplicitato, usalo 
+ * - altrimenti 5 per Skill Moves / Weak Foot, 99 per tutte le altre 
+ */
+function getUpgradeCap(statKey: string, explicitCap?: number): number {
+  if (explicitCap != null) return explicitCap;
+  const key = statKey.toLowerCase();
+  if (key === 'skill moves' || key === 'skillmoves' || key === 'weak foot' || key === 'weakfoot') {
+    return SKILL_WF_MAX;
+  }
+  return FACE_STAT_MAX;
+}
 
 /* -------------------------------------------------------------------------- */
 /*  FUNZIONE PRINCIPALE                                                       */
@@ -114,29 +138,45 @@ export async function runSimulationPage(
   limit: number,
   searchQuery = ''
 ): Promise<SimulationResult[]> {
+
   const players = await cachedPlayers();
-  const today = new Date();
-  const wanted = skip + limit;
+  const today   = new Date();
 
-  const filtered = players; 
+  const queryNorm = searchQuery.trim().toLowerCase();   // ✔ trim
 
-  const validEvos = selectedEvos.filter((e) => new Date(e.expires_on) >= today);
-  if (!validEvos.length) return [];
+  console.log(`[Simulation] Running: skip=${skip}, limit=${limit}, query="${queryNorm}"`);
+
+  const validEvos = selectedEvos.filter(e => new Date(e.expires_on) >= today);
+  if (!validEvos.length) {
+    console.log('[Simulation] Nessuna evoluzione valida, risultato vuoto.');
+    return [];
+  }
 
   const evosPrep = prepareEvos(validEvos);
-  const best: { sim: SimulationResult; metric: number }[] = [];
+  const allSims: SimulationResult[] = [];
 
-  for (const player of filtered) {
-    const sequences = findEvoSequencesDFS(player, evosPrep, Infinity);
+  for (let pi = 0; pi < players.length; pi++) {
+    const player = players[pi];
+    const debug  = pi < 20;
+    if (debug) console.log(`\n[Sim][Player ${pi + 1}] "${player.Name}"`);
+
+    const sequences = findEvoSequencesDFS(player, evosPrep, Infinity, debug);
+    if (debug) console.log(`[Sim][${player.Name}] sequences: ${sequences.length}`);
+
     for (const seq of sequences) {
+      if (seq.length !== evosPrep.length) {
+        if (debug) console.log(`  Skipping seq (${seq.length}/${evosPrep.length})`);
+        continue;
+      }
       const outcome = simulateEvoSequence(player, seq);
+      if (debug) console.log(`  Outcome success=${outcome.success}`);
       if (!outcome.success) continue;
 
       const sim: SimulationResult = {
         playerName: player.Name,
         initialStats: buildInitialStats(player),
         score: calculateCustomScore(outcome.finalStats, outcome.fullStats),
-        evolutionOrder: seq.map((e) => e.name),
+        evolutionOrder: seq.map(e => e.name),
         playstyles: outcome.playstyles,
         playstylesPlus: outcome.playstylesPlus,
         roles: outcome.roles,
@@ -145,25 +185,34 @@ export async function runSimulationPage(
         fullStatsBefore: outcome.fullStatsBefore,
         fullStats: outcome.fullStats,
       };
-      if (searchQuery && !sim.playerName.toLowerCase().includes(searchQuery.toLowerCase())) continue;
 
-      const f = sim.finalStats;
-      const metric = f.pac + f.sho + f.pas + f.dri + f.def + f.phy;
-      if (best.length < wanted) {
-        best.push({ sim, metric });
-        best.sort((a, b) => a.metric - b.metric);
-      } else if (metric > best[0].metric) {
-        best[0] = { sim, metric };
-        best.sort((a, b) => a.metric - b.metric);
+      if (debug) {
+        console.log('  FinalStats:', sim.finalStats);
+        console.log(`  Score: ${sim.score.toFixed(2)}`);
+      }
+
+      /* --------- filtro query normalizzata --------- */
+      if (queryNorm && !sim.playerName.toLowerCase().includes(queryNorm)) {
+        if (debug) console.log('  Filtered by query');
+        continue;
+      }
+
+      allSims.push(sim);
+      if (allSims.length >= skip + limit) {
+        console.log(`[Simulation] Raggiunti ${allSims.length} risultati, interrompo scansione.`);
+        break;
       }
     }
+    if (allSims.length >= skip + limit) break;
   }
 
-  return best.sort((a, b) => b.metric - a.metric).map((x) => x.sim).slice(skip, skip + limit);
-}
+  const results = allSims.slice(skip, skip + limit);
 
+  console.log(`[Simulation] Restituisco ${results.length} risultati (prima ${skip + 1}…${skip + limit})`);
+  return results;
+}
 /* -------------------------------------------------------------------------- */
-/*  PRE‑PROCESS EVOLUZIONI                                                     */
+/*  PRE-PROCESS EVOLUZIONI                                                    */
 /* -------------------------------------------------------------------------- */
 
 function prepareEvos(evos: Evolution[]): PreparedEvolution[] {
@@ -192,22 +241,25 @@ function prepareEvos(evos: Evolution[]): PreparedEvolution[] {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  DFS + PRUNING + MEMO LRU                                                   */
+/*  DFS + PRUNING + MEMO LRU                                                  */
 /* -------------------------------------------------------------------------- */
 
 function findEvoSequencesDFS(
   player: Player,
   evos: PreparedEvolution[],
-  need: number
+  need: number,
+  debug = false
 ): PreparedEvolution[][] {
   const root: NodeState = (() => {
-    const raw = player['play style']
-      ? player['play style'].split(',').map((p) => p.trim())
-      : [];
-    const plus = new Set(raw.filter((p) => p.endsWith('+')).map((p) => p.slice(0, -1)));
-    const plain = new Set(raw.filter((p) => !p.endsWith('+')).filter((p) => !plus.has(p)));
+    const rawPS = player['play style'] ? player['play style'].split(',').map((p) => p.trim()) : [];
+    const plus = new Set(
+      rawPS
+        .filter((p) => p.endsWith('+') || /\(\+\)/.test(p))
+        .map((p) => p.replace(/[+()]/g, '').trim())
+    );
+    const plain = new Set(rawPS.filter((p) => !plus.has(p.replace(/[+()]/g, '').trim())));
 
-    const initPos = player.Position.split(/[\/;]/).map((s) => s.trim());
+    const initPos = player.Position.split(/[\/;,]/).map((s) => s.trim());
     const roles = new Set<string>([...initPos, ...player.alternativePositions]);
 
     return {
@@ -220,8 +272,20 @@ function findEvoSequencesDFS(
     };
   })();
 
-  const snap = (s: Stats): string =>
-    [s.ovr, s.pac, s.sho, s.pas, s.dri, s.def, s.phy, s.skillMoves, s.weakFoot].join(',');
+  const statKeys = new Set([
+    'Overall',
+    'Pace',
+    'Shooting',
+    'Dribbling',
+    'Defending',
+    'Physicality',
+    'Passing',
+    'Skill Moves',
+    'Weak Foot',
+  ]);
+
+  const snap = (s: Stats, pl: number, pp: number): string =>
+    [s.ovr, s.pac, s.sho, s.pas, s.dri, s.def, s.phy, s.skillMoves, s.weakFoot, pl, pp].join(',');
 
   const memo = new Map<string, true>();
   const results: PreparedEvolution[][] = [];
@@ -229,43 +293,38 @@ function findEvoSequencesDFS(
 
   function dfs(state: NodeState, chosen: PreparedEvolution[], mask: number) {
     if (results.length >= need) return;
-    let any = false;
+    let found = false;
 
     for (let i = 0; i < evos.length; i++) {
       if (used[i]) continue;
-      any = true;
       const evo = evos[i];
 
-      // ——— controllo requisiti direttamente da evo.requirements ———
+      // Verifica requisiti
       let ok = true;
       for (const reqKey of Object.keys(evo.requirements)) {
         const raw = evo.requirements[reqKey]!;
-        // requisiti statistici Min/Max
-        const statKeys = ['Overall','Pace','Shooting','Dribbling','Defending','Physicality','Passing','Skill Moves','Weak Foot'];
-        if (statKeys.includes(reqKey)) {
+        if (statKeys.has(reqKey)) {
           const sk = statKeyMapping(reqKey)!;
           const v = state.stats[sk];
           const { type, value } = parseRequirement(raw)!;
-          if ((type === 'min' && v < value) || (type === 'max' && v > value)) {
-            ok = false; break;
-          }
-        }
-        // requisito di posizione
-        else if (reqKey === 'Position') {
-          if (!state.roles.has(raw.toUpperCase())) { ok = false; break; }
-        }
-        // requisito di rarità
-        else if (reqKey === 'Rarity') {
+          if ((type === 'min' && v < value) || (type === 'max' && v > value)) { ok = false; break; }
+        } else if (reqKey === 'Position') {
+          const wanted = raw.split(/[,/;]/).map((p) => p.trim().toUpperCase());
+          if (!wanted.some((pos) => state.roles.has(pos))) { ok = false; break; }
+        } else if (reqKey === 'Max Pos.') {
+          if (state.roles.size > +raw) { ok = false; break; }
+        } else if (reqKey === 'Rarity') {
           if (state.rarity !== raw) { ok = false; break; }
         }
-        // (altri tipi di requisito se necessario…)
       }
       if (!ok) continue;
 
-      // controllo playstyle caps
+      found = true;
+
+      // Controllo playstyle caps
       if (state.plainPS > evo.capBase || state.plusPS > evo.capPlus) continue;
 
-      // costruisco stato next
+      // Costruisco next state
       const next: NodeState = {
         stats: { ...state.stats },
         plainPS: state.plainPS,
@@ -275,37 +334,36 @@ function findEvoSequencesDFS(
         deadline: state.deadline,
       };
 
-      // aggiorno deadline e nuove posizioni
+      // Deadline e nuove posizioni
       const exp = new Date(evo.expires_on);
       if (exp < next.deadline) next.deadline = exp;
-      evo.new_positions.forEach((p) => next.roles.add(p));
+      evo.new_positions.forEach((p) => next.roles.add(p.toUpperCase()));
 
-      // applico upgrade parsati (face stats, playstyles, ruolo, rarità…)
+      // Applica upgrades parsati
       for (const pu of evo.upgradesParsed) {
         if (pu.type === 'stat' && pu.key && pu.delta != null) {
           const sk2 = statKeyMapping(pu.key);
           if (sk2) {
             const old = next.stats[sk2];
-            const inc = pu.delta;
-            const cap = pu.cap ?? FACE_STAT_MAX;
-            const applied = Math.min(inc, Math.max(0, cap - old));
-            next.stats[sk2] = old + applied;
+            const capValue = getUpgradeCap(pu.key, pu.cap);
+            const applied = Math.min(pu.delta, Math.max(0, capValue - old));
+            if (applied) next.stats[sk2] = old + applied;
           }
-        } else if (pu.type === 'playstyle') {
+        } else if (pu.type === 'playstyle' && pu.key) {
           if (next.plainPS < evo.capBase) next.plainPS++;
-        } else if (pu.type === 'playstylePlus') {
+        } else if (pu.type === 'playstylePlus' && pu.key) {
           if (next.plusPS < evo.capPlus) {
             next.plusPS++;
             if (next.plainPS) next.plainPS--;
           }
         } else if (pu.type === 'rarity' && pu.text) {
           next.rarity = pu.text;
-        } else if (['newPos','role','rolePlus'].includes(pu.type) && pu.key) {
-          next.roles.add(pu.key);
+        } else if ((pu.type === 'newPos' || pu.type === 'role' || pu.type === 'rolePlus') && pu.key) {
+          next.roles.add(pu.key.toUpperCase());
         }
       }
 
-      // playstyles_added e playstyles_plus_added
+      // Playstyles_added / plus
       evo.playstyles_added.forEach((ps) => {
         if (next.plainPS < evo.capBase) next.plainPS++;
       });
@@ -316,7 +374,7 @@ function findEvoSequencesDFS(
         }
       });
 
-      const key = mask + (1 << i) + ':' + snap(next.stats);
+      const key = mask + (1 << i) + ':' + snap(next.stats, next.plainPS, next.plusPS);
       if (!memo.has(key)) {
         if (memo.size > MEMO_LIMIT) memo.clear();
         memo.set(key, true);
@@ -328,7 +386,7 @@ function findEvoSequencesDFS(
       }
     }
 
-    if (!any) {
+    if (!found) {
       results.push(chosen.slice());
     }
   }
@@ -338,71 +396,82 @@ function findEvoSequencesDFS(
 }
 
 /* -------------------------------------------------------------------------- */
-/*  SIMULAZIONE COMPLETA                                                       */
+/*  SIMULAZIONE COMPLETA                                                      */
 /* -------------------------------------------------------------------------- */
 
 function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): SimulationOutcome {
-  // Build initial face e advanced stats
   const initialFace = buildInitialStats(player);
   const face: Stats = { ...initialFace };
   const advancedStats = { ...(player.fullStats || {}) };
   const fullStatsBefore = { ...advancedStats };
 
-  // gruppi di advanced stats
-  const advancedGroups: Record<keyof Stats,string[]> = {
+  const advancedGroups: Record<keyof Stats, string[]> = {
     ovr: [],
-    pac: ['Acceleration','Sprint Speed'],
-    sho: ['Positioning','Finishing','Shot Power','Long Shots','Volleys','Penalties'],
-    pas: ['Vision','Crossing','Free Kick Accuracy','Short Passing','Long Passing','Curve'],
-    dri: ['Agility','Balance','Reactions','Ball Control','Dribbling','Composure'],
-    def: ['Interceptions','Heading Accuracy','Def Awareness','Standing Tackle','Sliding Tackle'],
-    phy: ['Jumping','Stamina','Strength','Aggression'],
+    pac: ['Acceleration', 'Sprint Speed'],
+    sho: ['Positioning', 'Finishing', 'Shot Power', 'Long Shots', 'Volleys', 'Penalties'],
+    pas: ['Vision', 'Crossing', 'Free Kick Accuracy', 'Short Passing', 'Long Passing', 'Curve'],
+    dri: ['Agility', 'Balance', 'Reactions', 'Ball Control', 'Dribbling', 'Composure'],
+    def: ['Interceptions', 'Heading Accuracy', 'Def Awareness', 'Standing Tackle', 'Sliding Tackle'],
+    phy: ['Jumping', 'Stamina', 'Strength', 'Aggression'],
     skillMoves: [],
-    weakFoot: []
+    weakFoot: [],
   };
 
   const statMap: Record<string, keyof Stats> = {
-    Overall: 'ovr', Pace: 'pac', Shooting: 'sho', Dribbling: 'dri',
-    Defending: 'def', Physicality: 'phy', Passing: 'pas',
-    'Skill Moves': 'skillMoves', 'Weak Foot': 'weakFoot', SM: 'skillMoves', WF: 'weakFoot'
+    Overall: 'ovr',
+    Pace: 'pac',
+    Shooting: 'sho',
+    Dribbling: 'dri',
+    Defending: 'def',
+    Physicality: 'phy',
+    Passing: 'pas',
+    'Skill Moves': 'skillMoves',
+    'Weak Foot': 'weakFoot',
+    SM: 'skillMoves',
+    WF: 'weakFoot',
   };
 
   let rarity = '';
   const roles = new Set<string>([
-    ...player.Position.split(/[\/;]/).map(s => s.trim()),
-    ...player.alternativePositions
+    ...player.Position.split(/[\/;,]/).map((s) => s.trim().toUpperCase()),
+    ...player.alternativePositions.map((p) => p.toUpperCase()),
   ]);
   let deadline = new Date('9999-12-31');
-  const rawPS = player['play style'] ? player['play style'].split(',').map(s => s.trim()) : [];
-  const plusSet = new Set(rawPS.filter(p => p.endsWith('+')).map(p => p.slice(0,-1)));
-  const plainSet = new Set(rawPS.filter(p => !p.endsWith('+')).filter(p => !plusSet.has(p)));
+  const rawPS = player['play style'] ? player['play style'].split(',').map((s) => s.trim()) : [];
+  const plusSet = new Set(rawPS.filter((p) => p.endsWith('+')).map((p) => p.slice(0, -1)));
+  const plainSet = new Set(rawPS.filter((p) => !p.endsWith('+')).filter((p) => !plusSet.has(p)));
 
   for (const evo of seq) {
-    // 1) controlli requisiti da evo.requirements
+    // 1) requisiti
     for (const reqKey of Object.keys(evo.requirements)) {
       const raw = evo.requirements[reqKey]!;
-      const statKeys = ['Overall','Pace','Shooting','Dribbling','Defending','Physicality','Passing','Skill Moves','Weak Foot'];
+      const statKeys = [
+        'Overall','Pace','Shooting','Dribbling','Defending','Physicality','Passing','Skill Moves','Weak Foot'
+      ];
       if (statKeys.includes(reqKey)) {
         const sk = statMap[reqKey]!;
         const v = face[sk];
         const { type, value } = parseRequirement(raw)!;
         if ((type === 'min' && v < value) || (type === 'max' && v > value)) return fail();
-      }
-      else if (reqKey === 'Position') {
-        if (!roles.has(raw.toUpperCase())) return fail();
-      }
-      else if (reqKey === 'Rarity') {
+      } else if (reqKey === 'Position') {
+        const positions = raw.split(/[,/;]/).map((pos) => pos.trim().toUpperCase());
+        if (!positions.some((p) => roles.has(p))) return fail();
+      } else if (reqKey === 'Max Pos.') {
+        if (roles.size > +raw) return fail();
+      } else if (reqKey === 'Rarity') {
         if (rarity !== raw) return fail();
       }
     }
-    // 2) PS caps
+
+    // 2) playstyle caps
     if (plainSet.size > evo.capBase || plusSet.size > evo.capPlus) return fail();
-    // 3) deadline & nuove posizioni
+
+    // 3) deadline e posizioni
     const exp = new Date(evo.expires_on);
     if (exp < deadline) deadline = exp;
-    evo.new_positions.forEach(p => roles.add(p));
+    evo.new_positions.forEach((p) => roles.add(p.toUpperCase()));
 
-    // 4) face stat upgrades
+    // 4) applica upgrade facestats
     for (const up of evo.upgrades) {
       for (const line of up.description) {
         const pu = parseUpgradeLine(line);
@@ -410,9 +479,8 @@ function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): Simulati
           const sk = statMap[pu.key];
           if (sk) {
             const old = face[sk];
-            const inc = pu.delta;
-            const capValue = pu.cap ?? FACE_STAT_MAX;
-            const applied = Math.min(inc, Math.max(0, capValue - old));
+            const capValue = getUpgradeCap(pu.key, pu.cap);
+            const applied = Math.min(pu.delta, Math.max(0, capValue - old));
             if (applied > 0) face[sk] = old + applied;
           }
         }
@@ -429,13 +497,15 @@ function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): Simulati
           if (plainSet.has(p.key)) plainSet.delete(p.key);
         }
         if (p.type === 'rarity' && p.text) rarity = p.text;
-        if ((p.type==='newPos'||p.type==='role'||p.type==='rolePlus')&&p.key) roles.add(p.key);
+        if ((p.type === 'newPos' || p.type === 'role' || p.type === 'rolePlus') && p.key) {
+          roles.add(p.key.toUpperCase());
+        }
       }
     }
-    evo.playstyles_added.forEach(ps => {
+    evo.playstyles_added.forEach((ps) => {
       if (plainSet.size < evo.capBase) plainSet.add(ps);
     });
-    evo.playstyles_plus_added.forEach(ps => {
+    evo.playstyles_plus_added.forEach((ps) => {
       if (plusSet.size < evo.capPlus) {
         plusSet.add(ps);
         if (plainSet.has(ps)) plainSet.delete(ps);
@@ -443,20 +513,14 @@ function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): Simulati
     });
   }
 
-  // 6) advanced stat upgrades based on face delta
+  // 6) advanced stat upgrades basati su delta face
   for (const key of Object.keys(face) as (keyof Stats)[]) {
     const delta = face[key] - initialFace[key];
     if (delta > 0) {
       const statName = faceKeyToString(key);
-      advancedStats[statName] = Math.min(
-        FACE_STAT_MAX,
-        (fullStatsBefore[statName] || 0) + delta
-      );
+      advancedStats[statName] = Math.min(FACE_STAT_MAX, (fullStatsBefore[statName] || 0) + delta);
       for (const sub of advancedGroups[key]) {
-        advancedStats[sub] = Math.min(
-          FACE_STAT_MAX,
-          (fullStatsBefore[sub] || 0) + delta
-        );
+        advancedStats[sub] = Math.min(FACE_STAT_MAX, (fullStatsBefore[sub] || 0) + delta);
       }
     }
   }
@@ -478,12 +542,17 @@ function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): Simulati
   function fail(): SimulationOutcome {
     return { ...ok(), success: false };
   }
-
   function faceKeyToString(k: keyof Stats): string {
-    const rev: Record<keyof Stats,string> = {
-      ovr: 'Overall', pac: 'Pace', sho: 'Shooting', pas: 'Passing',
-      dri: 'Dribbling', def: 'Defending', phy: 'Physicality',
-      skillMoves: 'Skill Moves', weakFoot: 'Weak Foot',
+    const rev: Record<keyof Stats, string> = {
+      ovr: 'Overall',
+      pac: 'Pace',
+      sho: 'Shooting',
+      pas: 'Passing',
+      dri: 'Dribbling',
+      def: 'Defending',
+      phy: 'Physicality',
+      skillMoves: 'Skill Moves',
+      weakFoot: 'Weak Foot',
     };
     return rev[k];
   }
@@ -493,25 +562,24 @@ function simulateEvoSequence(player: Player, seq: PreparedEvolution[]): Simulati
 /*  CALCOLO SCORE                                                             */
 /* -------------------------------------------------------------------------- */
 
-function calculateCustomScore(
-  face: Stats,
-  full: Record<string, number>
-): number {
+function calculateCustomScore(face: Stats, full: Record<string, number>): number {
   const sumFace = face.pac + face.sho + face.pas + face.dri + face.def + face.phy;
   const avgFace = sumFace / 6;
 
   const advKeys = [
-    'Acceleration','Sprint Speed','Positioning','Finishing','Shot Power','Long Shots',
-    'Volleys','Penalties','Vision','Crossing','Free Kick Accuracy','Short Passing',
-    'Long Passing','Curve','Dribbling','Agility','Balance','Reactions','Ball Control',
-    'Composure','Interceptions','Heading Accuracy','Def Awareness','Standing Tackle',
-    'Sliding Tackle','Jumping','Stamina','Strength','Aggression',
+    'Acceleration','Sprint Speed','Positioning','Finishing','Shot Power','Long Shots','Volleys',
+    'Penalties','Vision','Crossing','Free Kick Accuracy','Short Passing','Long Passing','Curve',
+    'Dribbling','Agility','Balance','Reactions','Ball Control','Composure','Interceptions',
+    'Heading Accuracy','Def Awareness','Standing Tackle','Sliding Tackle','Jumping','Stamina',
+    'Strength','Aggression',
   ];
 
-  let sum = 0;
-  let cnt = 0;
+  let sum = 0, cnt = 0;
   for (const k of advKeys) {
-    if (full[k] != null) { sum += full[k]; cnt++; }
+    if (full[k] != null) {
+      sum += full[k];
+      cnt++;
+    }
   }
   const avgAdv = cnt ? sum / cnt : 0;
 
@@ -563,39 +631,57 @@ function parseRequirement(req: string): { type: 'min' | 'max'; value: number } |
 }
 
 function parseUpgradeLine(line: string): ParsedUpgrade {
-  const l = line.trim();
-  if (l.startsWith('Rarity')) {
-    return { type: 'rarity', text: l.slice(6).trim() };
-  } else if (/^PlayStyle\+/.test(l)) {
-    const m = l.match(/^PlayStyle\+\s*([^(]+)(?:\(\^(\d+)\))?/)!;
+  // 1) normalizza: togli il simbolo ★ e trim
+  const l = line.replace(/★/g, '').trim();
+
+  /* -------------------- pattern non-stat (unchanged) -------------------- */
+  if (l.startsWith('Rarity'))        return { type: 'rarity', text: l.slice(6).trim() };
+
+  if (/^PlayStyle\+/.test(l)) {
+    const m = l.match(/^PlayStyle\+\s*([^ (]+)(?:\(\^(\d+)\))?/)!;
     return { type: 'playstylePlus', key: m[1].trim(), cap: m[2] ? +m[2] : undefined };
-  } else if (/^PlayStyle/.test(l)) {
-    const m = l.match(/^PlayStyle\s*([^(]+)(?:\(\^(\d+)\))?/)!;
+  }
+  if (/^PlayStyle/.test(l)) {
+    const m = l.match(/^PlayStyle\s*([^ (]+)(?:\(\^(\d+)\))?/)!;
     return { type: 'playstyle', key: m[1].trim(), cap: m[2] ? +m[2] : undefined };
-  } else if (/^New Pos\./.test(l)) {
-    const m = l.match(/^New Pos\.\s*([^(]+)(?:\(\^(\d+)\))?/)!;
+  }
+  if (/^New Pos\./.test(l)) {
+    const m = l.match(/^New Pos\.\s*([^ (]+)(?:\(\^(\d+)\))?/)!;
     return { type: 'newPos', key: m[1].trim(), cap: m[2] ? +m[2] : undefined };
-  } else if (/^Role\+\+/.test(l)) {
-    const m = l.match(/^Role\+\+\s*([^(]+)(?:\(\^(\d+)\))?/)!;
+  }
+  if (/^Role\+\+/.test(l)) {
+    const m = l.match(/^Role\+\+\s*([^ (]+)(?:\(\^(\d+)\))?/)!;
     return { type: 'rolePlus', key: m[1].trim(), cap: m[2] ? +m[2] : undefined };
   }
-  const statRe = /^([\w\.\s]+)\s+([+\-]\d+)(?:[^\(\d]|$)(?:\(\^(\d+)\))?/;
-  const sm = l.match(statRe);
-  if (sm) {
-    let key = sm[1].trim();
-    const norm: Record<string,string> = {
-      'Att. Position':'Positioning',
-      'Heading Acc.':'Heading Accuracy',
-      'Def. Aware':'Def Awareness',
-      'FK. Acc.':'Free Kick Accuracy',
-      'Short Pass':'Short Passing',
-      'Long Pass':'Long Passing',
-      'Slide Tackle':'Sliding Tackle',
-      'Stand Tackle':'Standing Tackle',
+
+  /* -------------------- nuovo pattern stat -------------------- */
+  // es.: "SM +3 (^4)"  | "Weak Foot +2 (^5)"  | "Pace +5"
+  const statRe = /^([\w\.\s]+?)\s+([+\-]\d+)(?:.*?\(\^(\d+)\))?/;
+  const m = l.match(statRe);
+  if (m) {
+    let key = m[1].trim();
+
+    /* normalizza alcune abbreviazioni */
+    const norm: Record<string, string> = {
+      'Att. Position': 'Positioning',
+      'Heading Acc.':   'Heading Accuracy',
+      'Def. Aware':     'Def Awareness',
+      'FK. Acc.':       'Free Kick Accuracy',
+      'Short Pass':     'Short Passing',
+      'Long Pass':      'Long Passing',
+      'Slide Tackle':   'Sliding Tackle',
+      'Stand Tackle':   'Standing Tackle',
     };
     if (norm[key]) key = norm[key];
-    return { type: 'stat', key, delta: +sm[2], cap: sm[3] ? +sm[3] : undefined };
+
+    return {
+      type: 'stat',
+      key,
+      delta: +m[2],
+      cap: m[3] ? +m[3] : undefined,   // <- ora viene catturato correttamente
+    };
   }
+
   return { type: 'unknown' };
 }
 
@@ -615,10 +701,19 @@ function splitCSVLine(line: string): string[] {
   for (let i = 0; i < line.length; i++) {
     const ch = line[i];
     const nx = line[i + 1];
-    if (inQ && ch === '"' && nx === '"') { cur += '"'; i++; continue; }
-    if (ch === '"') { inQ = !inQ; continue; }
-    if (ch === ',' && !inQ) { res.push(cur); cur = ''; }
-    else cur += ch;
+    if (inQ && ch === '"' && nx === '"') {
+      cur += '"';
+      i++;
+      continue;
+    }
+    if (ch === '"') {
+      inQ = !inQ;
+      continue;
+    }
+    if (ch === ',' && !inQ) {
+      res.push(cur);
+      cur = '';
+    } else cur += ch;
   }
   res.push(cur);
   return res.map((s) => s.trim());
@@ -628,23 +723,28 @@ function parseCSV(txt: string): Player[] {
   const lines = txt.split('\n').filter((l) => l.trim());
   const hdr = splitCSVLine(lines[0]);
   const numeric = [
-    'OVR','PAC','SHO','PAS','DRI','DEF','PHY',
-    'Acceleration','Sprint Speed','Positioning','Finishing','Shot Power','Long Shots',
-    'Volleys','Penalties','Vision','Crossing','Free Kick Accuracy','Short Passing',
-    'Long Passing','Curve','Dribbling','Agility','Balance','Reactions','Ball Control',
-    'Composure','Interceptions','Heading Accuracy','Def Awareness','Standing Tackle',
-    'Sliding Tackle','Jumping','Stamina','Strength','Aggression',
-    'Skill moves','Weak foot'
+    'OVR','PAC','SHO','PAS','DRI','DEF','PHY','Acceleration','Sprint Speed',
+    'Positioning','Finishing','Shot Power','Long Shots','Volleys','Penalties',
+    'Vision','Crossing','Free Kick Accuracy','Short Passing','Long Passing','Curve',
+    'Dribbling','Agility','Balance','Reactions','Ball Control','Composure',
+    'Interceptions','Heading Accuracy','Def Awareness','Standing Tackle','Sliding Tackle',
+    'Jumping','Stamina','Strength','Aggression','Skill moves','Weak foot',
   ];
 
   const players: Player[] = [];
   for (let i = 1; i < lines.length; i++) {
     const vals = splitCSVLine(lines[i]);
     const obj: any = {};
-    hdr.forEach((h, j) => obj[h] = vals[j] ?? '');
-    numeric.forEach((c) => { if (obj[c] !== '') obj[c] = +obj[c]; });
+    hdr.forEach((h, j) => (obj[h] = vals[j] ?? ''));
+    numeric.forEach((c) => {
+      if (obj[c] !== '') obj[c] = +obj[c];
+    });
 
-    const parts = (obj['Position'] || '').split(/[\/;]/).map((s: string) => s.trim()).filter(Boolean);
+    // gestione posizioni
+    const parts = (obj['Position'] || '')
+      .split(/[\/;,]/)
+      .map((s: string) => s.trim())
+      .filter(Boolean);
     obj.Position = parts[0] || '';
     obj.alternativePositions = [
       ...parts.slice(1),
@@ -652,13 +752,15 @@ function parseCSV(txt: string): Player[] {
         ? obj['Alternative positions']
             .split(obj['Alternative positions'].includes(';') ? ';' : ',')
             .map((s: string) => s.trim())
-        : [])
+        : []),
     ];
 
     obj.skillMoves = +obj['Skill moves'];
     obj.weakFoot = +obj['Weak foot'];
     obj.fullStats = {};
-    numeric.forEach((c) => { if (obj[c] != null) obj.fullStats[c] = obj[c]; });
+    numeric.forEach((c) => {
+      if (obj[c] != null) obj.fullStats[c] = obj[c];
+    });
 
     players.push(obj as Player);
   }
