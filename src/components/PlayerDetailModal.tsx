@@ -44,10 +44,15 @@ interface ModalProps {
   name: string;
   evolutionOrder: string[];
   roles: string[];
-  playstyles: string[]; playstylesPlus: string[];
+  playstyles: string[];          // senza plus
+  playstylesPlus: string[];      // solo plus
   generalStatsBefore: Stats; generalStatsAfter: Stats;
   detailedStatsBefore: Record<string, number>; detailedStats: Record<string, number>;
 }
+
+/* ───── helper per percorso icona ───── */
+const psSrc = (txt: string, plus: boolean): string =>
+  `/data/ps/${txt.replace(/\s+/g, '_')}${plus ? '+' : ''}.png`;
 
 /* ───── component ───── */
 const PlayerDetailModal: React.FC<ModalProps> = (p) => {
@@ -134,10 +139,10 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
     return { label: `${perc}%`, color };
   };
 
-  /* merge playstyles */
+  /* ---- merge playstyles: PLUS prima! ---- */
   const ps = [
-    ...p.playstyles.map(x => ({ txt: x, plus: false })),
-    ...p.playstylesPlus.map(x => ({ txt: x + '+', plus: true })),
+    ...p.playstylesPlus.map(txt => ({ txt, plus: true })),  // Trickster → Trickster+
+    ...p.playstyles.map(txt    => ({ txt, plus: false })),
   ];
 
   /* ───────────────────── render ───────────────────── */
@@ -173,11 +178,21 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
             <>
               <h4 className="self-start mt-4 mb-2 text-gray-300 font-medium">Playstyles</h4>
               <div className="flex flex-wrap gap-2">
-                {ps.map((z, i) => (
-                  <span key={i}
-                        className={`px-2 py-1 text-xs rounded-full ${z.plus ? 'bg-yellow-400 text-black' : 'bg-[#2a2a2a] text-gray-200'}`}>
-                    {z.txt}
-                  </span>
+                {ps.map(({ txt, plus }, i) => (
+                  <img
+                    key={i}
+                    src={psSrc(txt, plus)}
+                    alt={plus ? `${txt}+` : txt}
+                    title={plus ? `${txt}+` : txt}
+                    className={`
+                      w-8 h-8 object-contain
+                      ${plus ? ' ' : ''}
+                    `}
+                    onError={e => {
+                      /* nascondi se manca il file */
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
                 ))}
               </div>
             </>
