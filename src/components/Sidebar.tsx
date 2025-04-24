@@ -1,19 +1,21 @@
+// src/components/Sidebar.tsx
 import React from 'react';
-import { Home, Filter, Settings, BarChart2, Sparkle } from 'lucide-react';
-import { useLocation, NavLink } from 'react-router-dom';   // <-- usiamo react-router
+import { Home, Sparkle, Users, Filter, BarChart2, Settings } from 'lucide-react';
+import { useLocation, NavLink } from 'react-router-dom';
 
 interface Props { isOpen: boolean }
 
 const links = [
-  { icon: Home,      label: 'Dashboard',   href: '/' },
-  { icon: Sparkle,   label: 'Evolutions',  href: '/evolutions' },
-  { icon: Filter,    label: 'Filters',     href: '/filters' },
-  { icon: BarChart2, label: 'Results',     href: '/results' },
-  { icon: Settings,  label: 'Settings',    href: '/settings' },
+  { icon: Home,      label: 'Dashboard',  href: '/' },
+  { icon: Sparkle,   label: 'Evolutions', href: '/evolutions' },
+  { icon: Users,     label: 'Giocatori',  href: '/players' },
+  { icon: Filter,    label: 'Filters',    href: '/filters' },
+  { icon: BarChart2, label: 'Results',    href: '/results' },
+  { icon: Settings,  label: 'Settings',   href: '/settings' },
 ];
 
 const Sidebar: React.FC<Props> = ({ isOpen }) => {
-  const { pathname } = useLocation();      // rotte attive
+  const { pathname } = useLocation();
 
   return (
     <aside

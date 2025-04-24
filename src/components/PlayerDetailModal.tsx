@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Stats } from '../services/simulationService';
-import { X, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Info, TrendingUp } from 'lucide-react';
 
 /* ───── face stats meta ───── */
 const faceKeys: { k: keyof Stats; lbl: string }[] = [
   { k: 'ovr', lbl: 'OVR' }, { k: 'pac', lbl: 'PAC' }, { k: 'sho', lbl: 'SHO' },
-  { k: 'pas', lbl: 'PAS' }, { k: 'dri', lbl: 'DRI' }, { k: 'def', lbl: 'DEF' }, { k: 'phy', lbl: 'PHY' }
+  { k: 'pas', lbl: 'PAS' }, { k: 'dri', lbl: 'DRI' }, { k: 'def', lbl: 'DEF' }, { k: 'phy', lbl: 'PHY' },
 ];
 
 /* ───── gruppi secondari ───── */
@@ -19,17 +19,24 @@ const secGroups: SecondaryGroup[] = [
   { g:'Physicality', k:['Jumping','Stamina','Strength','Aggression'] },
 ];
 
-/* ───── parser riga upgrade (face stat) ───── */
-function parseLine(line: string): { stat?: keyof Stats; delta?: number } {
+/* ───── parser riga upgrade (stat + cap) ───── */
+function parseLine(line: string): { stat?: keyof Stats; delta?: number; cap?: number } {
   const map: Record<string, keyof Stats> = {
     Overall:'ovr', Pace:'pac', Shooting:'sho', Passing:'pas',
-    Dribbling:'dri', Defending:'def', Physicality:'phy'
+    Dribbling:'dri', Defending:'def', Physicality:'phy',
   };
-  const m = line.match(/^([\w\.\s]+)\s+([+\-]\d+)/);
+  const l = line.replace(/★/g, '').trim();
+  const m = l.match(/^([\w\.\s]+?)\s+([+\-]\d+)(?:.*?\(\^(\d+)\))?/);
   if (!m) return {};
   const stat = map[m[1].trim()];
-  return stat ? { stat, delta: +m[2] } : {};
+  const delta = +m[2];
+  const cap   = m[3] ? +m[3] : undefined;
+  return stat ? { stat, delta, cap } : {};
 }
+
+/* ───── scoring helper (solo face stats) ───── */
+const scoreFace = (s: Stats): number =>
+  0.2 * s.ovr + 0.5 * ((s.pac + s.sho + s.pas + s.dri + s.def + s.phy) / 6);
 
 /* ───── props ───── */
 interface ModalProps {
@@ -44,64 +51,93 @@ interface ModalProps {
 
 /* ───── component ───── */
 const PlayerDetailModal: React.FC<ModalProps> = (p) => {
-  /* mappa <nome evo> → delta teorici */
-  const [ideal, setIdeal] =
-    useState<Record<string, Partial<Record<keyof Stats, number>>>>({});
 
+  /* mappa <evo> → righe parse-ate */
+  const [evoLines, setEvoLines] =
+    useState<Record<string, { stat: keyof Stats; delta: number; cap?: number }[]>>({});
+
+  /* fetch evo.json una sola volta */
   useEffect(() => {
     fetch('/data/evo.json')
       .then(r => r.json())
       .then((evos: any[]) => {
-        const obj: Record<string, Partial<Record<keyof Stats, number>>> = {};
+        const map: Record<string, { stat: keyof Stats; delta: number; cap?: number }[]> = {};
         evos.forEach(e => {
-          const deltas: Partial<Record<keyof Stats, number>> = {};
+          const arr: { stat: keyof Stats; delta: number; cap?: number }[] = [];
           e.upgrades.forEach((u: any) =>
             u.description.forEach((line: string) => {
-              const { stat, delta } = parseLine(line);
-              if (stat && delta! > 0) deltas[stat] = (deltas[stat] || 0) + delta!;
-            })
+              const o = parseLine(line);
+              if (o.stat && o.delta) arr.push(o as any);
+            }),
           );
-          obj[e.name] = deltas;
+          map[e.name] = arr;
         });
-        setIdeal(obj);
+        setEvoLines(map);
       })
       .catch(console.error);
   }, []);
 
   if (!p.isOpen) return null;
 
-  /* ----- costruzione step (interpolazione placeholder) ----- */
-  const n = p.evolutionOrder.length;
-  const steps: { name: string; stats: Stats }[] = [
-    { name: 'Base', stats: { ...p.generalStatsBefore } }
-  ];
-  p.evolutionOrder.forEach((evo, idx) => {
-    const factor = (idx + 1) / n;
-    const s: Stats = { ...p.generalStatsBefore };
-    faceKeys.forEach(({ k }) => {
-      const diff = p.generalStatsAfter[k] - p.generalStatsBefore[k];
-      s[k] = Math.round(p.generalStatsBefore[k] + diff * factor);
+  /* ----- costruzione step ----- */
+  interface Step { name: string; stats: Stats; idealGain: number; scoreGain: number }
+  const steps: Step[] = [];
+  let curr: Stats = { ...p.generalStatsBefore };
+  let prevScore = scoreFace(curr);
+
+  steps.push({ name: 'Base', stats: { ...curr }, idealGain: 0, scoreGain: 0 });
+
+  p.evolutionOrder.forEach(evo => {
+    const lines = evoLines[evo] || [];
+    const next: Stats = { ...curr };
+    let idealGain = 0;
+
+    lines.forEach(({ stat, delta, cap }) => {
+      if (!stat || delta <= 0) return;
+      const hardCap = cap ?? 99;
+      const available = Math.max(0, hardCap - next[stat]);
+      const apply = Math.min(delta, available);
+      if (apply > 0) {
+        next[stat] += apply;
+        if (stat !== 'ovr') idealGain += apply;
+      }
     });
-    steps.push({ name: evo, stats: s });
+
+    const nextScore = scoreFace(next);
+    const scoreGain = nextScore - prevScore;
+
+    steps.push({ name: evo, stats: next, idealGain, scoreGain });
+    curr = next;
+    prevScore = nextScore;
   });
 
-  /* ----- efficienza step ----- */
+  const totalScoreGain = scoreFace(p.generalStatsAfter) - scoreFace(p.generalStatsBefore);
+
+  /* ----- helpers per timeline ----- */
   const eff = (i: number) => {
     if (i === 0) return { label: '—', color: '' };
-    const prev = steps[i - 1].stats, curr = steps[i].stats, evo = steps[i].name;
-    const idealMap = ideal[evo] || {};
-    const real = faceKeys.slice(1).reduce((s, { k }) => s + (curr[k] - prev[k]), 0);
-    const idealSum = Object.values(idealMap).reduce((s, v) => s + (v || 0), 0);
-    if (!idealSum) return { label: '—', color: '' };
-    const perc = Math.round((real / idealSum) * 100);
+    const real = faceKeys.slice(1).reduce(
+      (s, { k }) => s + (steps[i].stats[k] - steps[i - 1].stats[k]),
+      0
+    );
+    const ideal = steps[i].idealGain;
+    if (!ideal) return { label: '—', color: '' };
+    const perc = Math.round((real / ideal) * 100);
     const color = perc >= 80 ? 'text-green-400' : perc >= 50 ? 'text-yellow-400' : 'text-red-500';
     return { label: `${perc}%`, color };
   };
 
-  /* playstyles merge */
+  const val = (i: number) => {
+    if (i === 0 || !totalScoreGain) return { label: '—', color: '' };
+    const perc = Math.round((steps[i].scoreGain / totalScoreGain) * 100);
+    const color = perc >= 30 ? 'text-green-400' : perc >= 15 ? 'text-yellow-400' : 'text-red-500';
+    return { label: `${perc}%`, color };
+  };
+
+  /* merge playstyles */
   const ps = [
     ...p.playstyles.map(x => ({ txt: x, plus: false })),
-    ...p.playstylesPlus.map(x => ({ txt: x + '+', plus: true }))
+    ...p.playstylesPlus.map(x => ({ txt: x + '+', plus: true })),
   ];
 
   /* ───────────────────── render ───────────────────── */
@@ -138,7 +174,8 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
               <h4 className="self-start mt-4 mb-2 text-gray-300 font-medium">Playstyles</h4>
               <div className="flex flex-wrap gap-2">
                 {ps.map((z, i) => (
-                  <span key={i} className={`px-2 py-1 text-xs rounded-full ${z.plus ? 'bg-yellow-400 text-black' : 'bg-[#2a2a2a] text-gray-200'}`}>
+                  <span key={i}
+                        className={`px-2 py-1 text-xs rounded-full ${z.plus ? 'bg-yellow-400 text-black' : 'bg-[#2a2a2a] text-gray-200'}`}>
                     {z.txt}
                   </span>
                 ))}
@@ -169,6 +206,7 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
               {steps.map(({ name, stats }, idx) => {
                 const prev = idx > 0 ? steps[idx - 1].stats : stats;
                 const effObj = eff(idx);
+                const valObj = val(idx);
 
                 return (
                   <div key={idx} className="min-w-[220px] shrink-0 bg-[#202020] rounded-lg p-4 snap-start">
@@ -192,12 +230,14 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
                     </ul>
 
                     {idx > 0 && (
-                      <div className="flex items-center justify-end gap-1 mt-2 text-xs">
-                        <span title="Efficiency = real gain / theoretical gain">
-                          <Info className="w-3 h-3 text-gray-400" />
-                        </span>
-                        <span className={effObj.color}>{effObj.label}</span>
-                      </div>
+                      <>
+                        <div className="flex items-center justify-end gap-1 mt-0.5 text-xs">
+                          <span title="Value = share of total score gain">
+                            <TrendingUp className="w-3 h-3 text-gray-400" />
+                          </span>
+                          <span className={valObj.color}>{valObj.label}</span>
+                        </div>
+                      </>
                     )}
                   </div>
                 );
@@ -205,11 +245,13 @@ const PlayerDetailModal: React.FC<ModalProps> = (p) => {
             </div>
 
             {/* arrows */}
-            <button onClick={() => document.getElementById('tl-track')?.scrollBy({ left: -240, behavior: 'smooth' })}
+            <button
+              onClick={() => document.getElementById('tl-track')?.scrollBy({ left: -240, behavior: 'smooth' })}
               className="absolute -left-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]">
               <ChevronLeft size={16} />
             </button>
-            <button onClick={() => document.getElementById('tl-track')?.scrollBy({ left: 240, behavior: 'smooth' })}
+            <button
+              onClick={() => document.getElementById('tl-track')?.scrollBy({ left: 240, behavior: 'smooth' })}
               className="absolute -right-2 top-1/2 -translate-y-1/2 bg-[#262626] p-2 rounded-full text-gray-300 hover:bg-[#2e2e2e]">
               <ChevronRight size={16} />
             </button>
